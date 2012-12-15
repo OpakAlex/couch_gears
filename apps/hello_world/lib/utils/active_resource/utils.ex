@@ -4,7 +4,7 @@ defmodule CouchDocumentAdd do
       defrecordp :document, unquote(opts)
 
       def _new(proplist, rec) do
-        proplist = proplist ++ [{:__methods__, rec}]
+        proplist = [__attributes__: proplist] ++ [{:__methods__, rec}]
         defrecord Document, proplist
         Document.new(proplist)
       end
@@ -21,16 +21,44 @@ defmodule CouchDocumentAdd do
         "ids"
       end
 
-      def _id(id, rec) do
-        id
+      def _id(doc, rec) do
+        field(:_id, doc, rec)
       end
 
-      def has_one(id, rec) do
+      def has_one(field_name, doc, rec) do
+        id = field(field_name, doc, rec)
         Utils.find(rec.db_name, id)
       end
 
-      def has_one(id, db_name, rec) do
+      def has_one(field_name, doc, db_name, rec) do
+        id = field(field_name, doc, rec)
         Utils.find(db_name, id)
+      end
+
+      def has_field?(name, doc, rev) do
+        :proplists.is_defined(name, doc.__attributes__)
+      end
+
+      def field(name,  doc, rec) do
+        :proplists.get_value(name, doc.__attributes__, :nil)
+      end
+
+      def add_field(k_v, doc, rec) do
+        tmp_attrs = doc.__attributes__ ++ k_v
+        proplist = [__attributes__: tmp_attrs] ++ [{:__methods__, rec}]
+
+        defrecord Document, proplist
+
+        Document.new(proplist)
+      end
+
+      def update_field({key, value}, doc, rec) do
+        delete_field(key, doc, rec)
+        add_field([{key, value}], doc, rec)
+      end
+
+      def delete_field(key, doc, rev) do
+        :proplists.delete(key, doc)
       end
 
     end
