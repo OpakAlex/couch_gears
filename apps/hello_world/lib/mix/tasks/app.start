@@ -1,0 +1,11 @@
+defmodule Mix.Tasks.App.Start do
+  use Mix.Task
+
+  @hidden true
+  @shortdoc "Run all Dynamos in a web server"
+
+  def run(_) do
+    IO.puts "Application has been started (fake)"
+  end
+
+end
