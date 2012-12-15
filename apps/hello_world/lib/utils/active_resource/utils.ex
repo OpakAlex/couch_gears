@@ -9,6 +9,14 @@ defmodule CouchDocumentAdd do
         Document.new(proplist)
       end
 
+      def db_name(document(db_name: db_name)) do
+        db_name
+      end
+
+      def db_name(db_name, rec) do
+        document(rec, db_name: db_name)
+      end
+
       def ids(rec) do
         "ids"
       end
@@ -18,7 +26,11 @@ defmodule CouchDocumentAdd do
       end
 
       def has_one(id, rec) do
-        Utils.find("labeled", id)
+        Utils.find(rec.db_name, id)
+      end
+
+      def has_one(id, db_name, rec) do
+        Utils.find(db_name, id)
       end
 
     end
@@ -40,12 +52,13 @@ defmodule CouchDocument do
     [binary_to_atom(key, :utf8)]
   end
 
-  def parse_to_record(body) do
+  def parse_to_record(body, db_name) do
     name = module_name(body)
-    Code.eval("defmodule #{name} do use CouchDocumentAdd, []; def new() do document end end")
+    Code.eval("defmodule #{name} do use CouchDocumentAdd, [db_name: nil]; def new() do document end end")
     {module, _ } = Code.eval("#{name}")
     proplist = proplist(body)
     document = module.new()
+    document = document.db_name(db_name)
     document._new(proplist)
   end
 
@@ -97,15 +110,13 @@ defmodule Utils do
              {<<"artist">>,<<"Christopher Parkening">>},
              {<<"artist_id">>,<<"6079">>},
              {<<"artist_uri">>,<<"medianet:artist:6079">>}]}
-        parse_to_record(body)
     else
       {body} = {[{<<"_id">>,<<"medianet:artist:6079">>},
              {<<"_rev">>,<<"2-15b8b3f4238233b35136c35b7db049e7">>},
              {<<"type">>,<<"artist">>},
              {<<"name">>,<<"Artist Test">>}]}
-      parse_to_record(body)
     end
-
+      parse_to_record(body, db_name)
   end
 
   defp get_db(db_name) do

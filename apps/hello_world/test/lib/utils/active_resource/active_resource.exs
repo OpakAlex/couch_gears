@@ -22,6 +22,10 @@ defmodule UtilsTest do
      assert @document.__methods__._id(@document._id) == "medianet:album:100049"
   end
 
+  test :db_name do
+    assert @document.__methods__.db_name == "labeled"
+  end
+
   test :has_one do
     assert @document.__methods__.has_one(@document.artist_uri)._id == "medianet:artist:6079"
   end
