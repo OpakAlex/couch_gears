@@ -54,7 +54,8 @@ defmodule UtilsTest do
 
   test :attributes do
      assert @document.__methods__._id(@document) == "medianet:album:100049"
+     assert @document.__methods__.field(:type, @document) == "album"
+     assert @document.__methods__._rev(@document) == "2-15b8b3f4238233b35136c35b7db049e7"
   end
-
 
 end

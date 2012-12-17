@@ -25,6 +25,10 @@ defmodule CouchDocumentAdd do
         field(:_id, doc, rec)
       end
 
+      def _rev(doc, rec) do
+        field(:_rev, doc, rec)
+      end
+
       def has_one(field_name, doc, rec) do
         id = field(field_name, doc, rec)
         Utils.find(rec.db_name, id)
@@ -36,21 +40,21 @@ defmodule CouchDocumentAdd do
       end
 
       def has_field?(name, doc, rev) do
-        :proplists.is_defined(name, doc.__attributes__)
+        :proplists.is_defined(to_binary(name), doc.__attributes__)
       end
 
       def field(name,  doc, rec) do
-        :proplists.get_value(name, doc.__attributes__, :nil)
+        :proplists.get_value(to_binary(name), doc.__attributes__, :nil)
       end
 
-      def create_field(k_v, doc, rec) do
-        tmp_attrs = doc.__attributes__ ++ k_v
+      def create_field([{key, value}], doc, rec) do
+        tmp_attrs = doc.__attributes__ ++ [{to_binary(key), value}]
         save(tmp_attrs, doc, rec)
       end
 
       def update_field([{key, value}], doc, rec) do
         proplist = remove_field(key, doc, rec)
-        proplist = proplist ++ [{key, value}]
+        proplist = proplist ++ [{to_binary(key), value}]
         save(proplist, doc, rec)
       end
 
@@ -60,13 +64,17 @@ defmodule CouchDocumentAdd do
       end
 
       defp remove_field(key, doc, rev) do
-        :proplists.delete(key, doc.__attributes__)
+        :proplists.delete(to_binary(key), doc.__attributes__)
       end
 
       defp save(proplist, doc, rec) do
         proplist = [__attributes__: proplist] ++ [{:__methods__, rec}]
         defrecord Document, proplist
         Document.new(proplist)
+      end
+
+      defp save_to_db(doc, rec) do
+        body = {doc.__attributes__}
       end
 
     end
@@ -76,37 +84,14 @@ end
 
 defmodule CouchDocument do
 
-  def key_to_atom([]) do
-    []
-  end
-
-  def key_to_atom([h|t]) do
-    key_to_atom(h) ++ key_to_atom(t)
-  end
-
-  def key_to_atom(key) do
-    [binary_to_atom(key, :utf8)]
-  end
-
   def parse_to_record(body, db_name) do
     name = module_name(body)
     Code.eval("defmodule #{name} do use CouchDocumentAdd, [db_name: nil]; def new() do document end end")
     {module, _ } = Code.eval("#{name}")
-    proplist = proplist(body)
+    proplist = body #proplist(body)
     document = module.new()
     document = document.db_name(db_name)
     document._new(proplist)
-  end
-
-  defp keys(body) do
-    List.flatten(key_to_atom(:proplists.get_keys(body)))
-  end
-
-
-  defp proplist(body) do
-    Enum.map keys(body), fn(el) ->
-      {el, get_value_from_json(to_binary(el), body)}
-    end
   end
 
   defp get_value_from_json(field, body) do
@@ -116,9 +101,7 @@ defmodule CouchDocument do
   defp module_name(body) do
     Mix.Utils.camelize(Regex.replace(%r/:/, get_value_from_json("_id", body), "_"))
   end
-
 end
-
 
 defmodule Utils do
   import CouchDocument
