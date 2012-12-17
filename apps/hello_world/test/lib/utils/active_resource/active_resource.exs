@@ -27,18 +27,24 @@ defmodule UtilsTest do
     assert @document.__methods__.has_field?(:artist, @document) == true
   end
 
-  test :add_field do
-    new_document = @document.__methods__.add_field([test_field: "test"], @document)
+  test :create_field do
+    new_document = @document.__methods__.create_field([test_field: "test"], @document)
     assert new_document.__methods__.field(:test_field, new_document) == "test"
 
-    new_document = new_document.__methods__.add_field([test: "a-test"], new_document)
+    new_document = new_document.__methods__.create_field([test: "a-test"], new_document)
     assert new_document.__methods__.field(:test, new_document) == "a-test"
     assert new_document.__methods__.field(:test_field, new_document) == "test"
   end
 
   test :update_field do
-    # update_doc = @document.__methods__.update_field([type: "test_update"], @document)
+     update_doc = @document.__methods__.update_field([type: "test_update"], @document)
+     assert update_doc.__methods__.field(:type, update_doc) == "test_update"
+  end
 
+  test :delete_field do
+    assert @document.__methods__.has_field?(:type, @document) == true
+    update_doc = @document.__methods__.delete_field(:type, @document)
+    assert update_doc.__methods__.has_field?(:type, update_doc) == false
   end
 
   test :has_one do

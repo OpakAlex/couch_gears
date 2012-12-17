@@ -43,22 +43,30 @@ defmodule CouchDocumentAdd do
         :proplists.get_value(name, doc.__attributes__, :nil)
       end
 
-      def add_field(k_v, doc, rec) do
+      def create_field(k_v, doc, rec) do
         tmp_attrs = doc.__attributes__ ++ k_v
-        proplist = [__attributes__: tmp_attrs] ++ [{:__methods__, rec}]
+        save(tmp_attrs, doc, rec)
+      end
 
+      def update_field([{key, value}], doc, rec) do
+        proplist = remove_field(key, doc, rec)
+        proplist = proplist ++ [{key, value}]
+        save(proplist, doc, rec)
+      end
+
+      def delete_field(key, doc, rec) do
+        proplist = remove_field(key, doc, rec)
+        save(proplist, doc, rec)
+      end
+
+      defp remove_field(key, doc, rev) do
+        :proplists.delete(key, doc.__attributes__)
+      end
+
+      defp save(proplist, doc, rec) do
+        proplist = [__attributes__: proplist] ++ [{:__methods__, rec}]
         defrecord Document, proplist
-
         Document.new(proplist)
-      end
-
-      def update_field({key, value}, doc, rec) do
-        delete_field(key, doc, rec)
-        add_field([{key, value}], doc, rec)
-      end
-
-      def delete_field(key, doc, rev) do
-        :proplists.delete(key, doc)
       end
 
     end
