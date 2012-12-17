@@ -17,7 +17,7 @@ end
 
 defmodule ActiveResource do
 
-  Code.require_file "../utils.ex", __FILE__
+  # Code.require_file "../utils.ex", __FILE__
 
   use DbSettings, [db_name: ""]
 

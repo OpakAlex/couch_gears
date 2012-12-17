@@ -1,5 +1,5 @@
-path = File.expand_path("../couch_document_add.ex", __FILE__)
-Code.load_file path
+# path = File.expand_path("../couch_document_add.ex", __FILE__)
+# Code.load_file path
 
 defmodule CouchDocument do
   use CouchDocumentAdd, [db_name: nil]

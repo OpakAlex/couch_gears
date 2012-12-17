@@ -1,10 +1,11 @@
-ExUnit.start
-Code.require_file "../../../../../lib/utils/active_resource/active_resource.ex", __FILE__
-defmodule UtilsTest do
+Code.require_file "../../test_helper.exs", __FILE__
+Code.require_file "../utils.exs", __FILE__
 
+defmodule ActiveResourceTest do
   use ExUnit.Case, async: false
   @db ActiveResource.new("labeled")
-  @document ActiveResource.find(@db.db_name(), "medianet:album:100049")
+
+  @document ActiveResourceTest.find(@db.db_name(), "medianet:album:100049")
 
   test :set_db_name do
     assert @db.db_name() == "labeled"
@@ -60,7 +61,7 @@ defmodule UtilsTest do
   end
 
   test :without_fields do
-    assert @document.__methods__.without_fields([:title, :genre, :label, :duration, :release_date, :total_tracks, :last_updated, :artist, :artist_id, :artist_uri], @document) == [{"_rev", "2-15b8b3f4238233b35136c35b7db049e7"}, {"_id", "medianet:album:100049"}, {"type", "album"}]
+    assert @document.__methods__.without_fields([:title, :genre, :label, :duration, :release_date, :total_tracks, :last_updated, :artist, :artist_id, :artist_uri, :_attachments], @document) == [{"_rev", "2-15b8b3f4238233b35136c35b7db049e7"}, {"_id", "medianet:album:100049"}, {"type", "album"}]
   end
 
   test :to_json do
