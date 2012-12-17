@@ -1,4 +1,4 @@
-defmodule CouchDocumentAdd do
+defmodule ActiveResource.CouchDocumentAdd do
   defmacro __using__(opts) do
     quote do
 
@@ -73,6 +73,10 @@ defmodule CouchDocumentAdd do
         attrs(doc)
       end
 
+      def with_fields(fields, doc, :to_json, rec) do
+        {with_fields(fields, doc, rec)}
+      end
+
       def without_fields(fields, doc, rec) do
         fields = Enum.map all_fields(doc, rec), fn(x) ->
           case include?(fields, x) do
@@ -83,6 +87,9 @@ defmodule CouchDocumentAdd do
         with_fields(List.flatten(fields), doc, rec)
       end
 
+      def without_fields(fields, doc, :to_json, rec) do
+        {without_fields(fields, doc, rec)}
+      end
 
       def to_json(doc, rec) do
         {attrs(doc)}
@@ -99,7 +106,7 @@ defmodule CouchDocumentAdd do
 
       defp save(proplist, doc, rec) do
         proplist = proplist_attrs(proplist, doc, rec)
-        # Utils.save_to_db(rec.db_name, proplist)
+        # ActiveResource.Utils.save_to_db(rec.db_name, proplist)
         doc.update(proplist)
       end
 

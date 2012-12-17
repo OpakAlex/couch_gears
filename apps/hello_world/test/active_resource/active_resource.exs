@@ -3,9 +3,9 @@ Code.require_file "../utils.exs", __FILE__
 
 defmodule ActiveResourceTest do
   use ExUnit.Case, async: false
-  @db ActiveResource.new("labeled")
+  @db ActiveResource.Main.new("labeled")
 
-  @document ActiveResourceTestHelper.find(@db.db_name(), "medianet:album:100049")
+  @document ActiveResourceTest.find(@db.db_name(), "medianet:album:100049")
 
   test :set_db_name do
     assert @db.db_name() == "labeled"

@@ -1,4 +1,4 @@
-defmodule DbSettings do
+defmodule ActiveResource.DbSettings do
   defmacro __using__(opts) do
     quote do
 
@@ -15,11 +15,11 @@ defmodule DbSettings do
   end
 end
 
-defmodule ActiveResource do
+defmodule ActiveResource.Main do
 
   # Code.require_file "../utils.ex", __FILE__
 
-  use DbSettings, [db_name: ""]
+  use ActiveResource.DbSettings, [db_name: ""]
 
   def new(db_name) do
     db_settings.db_name(db_name)
@@ -33,7 +33,7 @@ defmodule ActiveResource do
   end
 
   defp find_by_id(db_name, id) do
-    Utils.find(db_name, id)
+    ActiveResource.Utils.find(db_name, id)
   end
 
 end
