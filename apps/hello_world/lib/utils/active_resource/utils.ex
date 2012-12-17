@@ -69,12 +69,9 @@ defmodule CouchDocumentAdd do
 
       defp save(proplist, doc, rec) do
         proplist = [__attributes__: proplist] ++ [{:__methods__, rec}]
+        # Utils.save_to_db(rec.db_name, proplist)
         defrecord Document, proplist
         Document.new(proplist)
-      end
-
-      defp save_to_db(doc, rec) do
-        body = {doc.__attributes__}
       end
 
     end
@@ -136,6 +133,11 @@ defmodule Utils do
              {<<"name">>,<<"Artist Test">>}]}
     end
       parse_to_record(body, db_name)
+  end
+
+  def save_to_db(db_name, body) do
+    db = get_db(db_name)
+    :couch_db.update_doc(db, :couch_doc.from_json_obj({body}),[]).
   end
 
   defp get_db(db_name) do
