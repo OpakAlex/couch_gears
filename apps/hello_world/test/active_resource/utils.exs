@@ -1,4 +1,4 @@
-defmodule ActiveResourceTest do
+defmodule ActiveResourceTestHelper do
   def find(db_name, id) do
     body = [{"_id","medianet:album:100049"},
                  {"_rev","2-15b8b3f4238233b35136c35b7db049e7"},

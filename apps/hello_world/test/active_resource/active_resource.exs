@@ -5,7 +5,7 @@ defmodule ActiveResourceTest do
   use ExUnit.Case, async: false
   @db ActiveResource.new("labeled")
 
-  @document ActiveResourceTest.find(@db.db_name(), "medianet:album:100049")
+  @document ActiveResourceTestHelper.find(@db.db_name(), "medianet:album:100049")
 
   test :set_db_name do
     assert @db.db_name() == "labeled"

@@ -1,11 +1,20 @@
 defmodule ApplicationRouter do
   use CouchGears.Router
 
-  Code.require_file "../../../lib/active_resource/active_resource.ex", __FILE__
+  # Application level filters
+
+  # Sets CouchGears backend version info as a 'Server' response header
+  # filter CouchGears.Filters.ServerVersion
+
+  # Sets 'application/json' by default
+  filter CouchGears.Filters.ResponseTypeJSON
+
+  # Accepts only 'application/json' requests. Otherwise, returns a 'Bad Request' response
+  # filter CouchGears.Filters.OnlyRequestTypeJSON
+
 
   get "/" do
-    doc = ActiveResource.find("kiosk-mini", "medianet:track:10000017") # CouchGears.AppUtils.get_doc_id_from_doc("labeled","id")
-    res = doc.__methods__.field(:title, doc)
-    conn.resp_body(res)
+    res = ActiveResource.find("kiosk-mini", "medianet:track:10000017")
+    conn.resp_body([{:ok, "Hello World"}], :json)
   end
 end
