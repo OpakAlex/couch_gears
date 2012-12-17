@@ -14,10 +14,6 @@ defmodule UtilsTest do
     assert @document.__methods__.field(:_id, @document) == "medianet:album:100049"
   end
 
-  test :methods do
-    assert @document.__methods__.ids == "ids"
-  end
-
   test :db_name do
     assert @document.__methods__.db_name == "labeled"
   end
@@ -47,15 +43,28 @@ defmodule UtilsTest do
     assert update_doc.__methods__.has_field?(:type, update_doc) == false
   end
 
-  test :has_one do
-    has_one_doc = @document.__methods__.has_one(:artist_uri, @document)
-    assert has_one_doc.__methods__.field(:_id, has_one_doc) == "medianet:artist:6079"
+  test :rename_field do
+    update_doc = @document.__methods__.rename_field(:type, :new_type, @document)
+    assert update_doc.__methods__.field(:new_type, update_doc) == "album"
   end
 
   test :attributes do
      assert @document.__methods__._id(@document) == "medianet:album:100049"
      assert @document.__methods__.field(:type, @document) == "album"
      assert @document.__methods__._rev(@document) == "2-15b8b3f4238233b35136c35b7db049e7"
+  end
+
+  test :with_fields do
+    assert @document.__methods__.with_fields([:_id, :_rev, :type], @document) == [{"_id", "medianet:album:100049"},{"_rev", "2-15b8b3f4238233b35136c35b7db049e7"}, {"type", "album"}]
+    assert @document.__methods__.with_fields(@document) == @document.__attributes__
+  end
+
+  test :without_fields do
+    assert @document.__methods__.without_fields([:title, :genre, :label, :duration, :release_date, :total_tracks, :last_updated, :artist, :artist_id, :artist_uri], @document) == [{"_rev", "2-15b8b3f4238233b35136c35b7db049e7"}, {"_id", "medianet:album:100049"}, {"type", "album"}]
+  end
+
+  test :to_json do
+    assert @document.__methods__.to_json(@document) == {@document.__attributes__}
   end
 
 end
