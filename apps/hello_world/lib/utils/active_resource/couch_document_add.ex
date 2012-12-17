@@ -28,15 +28,15 @@ defmodule CouchDocumentAdd do
       end
 
       def has_field?(name, doc, rev) do
-        :proplists.is_defined(to_binary(name), doc.__attributes__)
+        :proplists.is_defined(to_binary(name), attrs(doc))
       end
 
       def field(name,  doc, rec) do
-        :proplists.get_value(to_binary(name), doc.__attributes__, :nil)
+        :proplists.get_value(to_binary(name), attrs(doc), :nil)
       end
 
       def create_field([{key, value}], doc, rec) do
-        tmp_attrs = doc.__attributes__ ++ [{to_binary(key), value}]
+        tmp_attrs = attrs(doc) ++ [{to_binary(key), value}]
         save(tmp_attrs, doc, rec)
       end
 
@@ -52,7 +52,7 @@ defmodule CouchDocumentAdd do
       end
 
       defp remove_field(key, doc, rev) do
-        :proplists.delete(to_binary(key), doc.__attributes__)
+        :proplists.delete(to_binary(key), attrs(doc))
       end
 
       def rename_field(name, new_name, doc, rec) do
@@ -70,7 +70,7 @@ defmodule CouchDocumentAdd do
       end
 
       def with_fields(doc, rec) do
-        doc.__attributes__
+        attrs(doc)
       end
 
       def without_fields(fields, doc, rec) do
@@ -85,7 +85,7 @@ defmodule CouchDocumentAdd do
 
 
       def to_json(doc, rec) do
-        {doc.__attributes__}
+        {attrs(doc)}
       end
 
       #private
@@ -94,7 +94,7 @@ defmodule CouchDocumentAdd do
       end
 
       defp all_fields(doc, rec) do
-        :proplists.get_keys(doc.__attributes__)
+        :proplists.get_keys(attrs(doc))
       end
 
       defp save(proplist, doc, rec) do
@@ -107,6 +107,10 @@ defmodule CouchDocumentAdd do
         Enum.map fields, fn(_field) ->
           {to_binary(_field), field(_field, doc, rec)}
         end
+      end
+
+      defp attrs(doc) do
+        doc.__attributes__
       end
 
       #list adds
