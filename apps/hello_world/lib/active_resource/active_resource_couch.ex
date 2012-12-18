@@ -1,4 +1,4 @@
-defmodule ActiveResource.Db do
+defmodule ActiveResource.Couch do
   def get(db_name, id) do
     case :couch_db.open_doc(get_db(db_name), id) do
       {ok, doc} ->
