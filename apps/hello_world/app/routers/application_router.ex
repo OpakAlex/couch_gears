@@ -15,6 +15,7 @@ defmodule ApplicationRouter do
 
   get "/" do
     doc = ActiveResource.Main.find("kiosk-mini","medianet:track:10000017")
-    conn.resp_body([{:ok, doc.__methods__.with_fields([:_id, :_rev], doc, :to_json)}], :json)
+    doc = doc.__methods__.update_field([{:type, "track"}], doc)
+    conn.resp_body([{:ok, doc.__methods__.with_fields([:_id, :_rev, :type], doc, :to_json)}], :json)
   end
 end

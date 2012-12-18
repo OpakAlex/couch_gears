@@ -35,6 +35,11 @@ defmodule ActiveResource.CouchDocumentAdd do
         :proplists.get_value(to_binary(name), attrs(doc), :nil)
       end
 
+      def delete_document(doc,rec) do
+        mark_as_delete(doc, rec)
+        :ok
+      end
+
       def create_field([{key, value}], doc, rec) do
         tmp_attrs = attrs(doc) ++ [{to_binary(key), value}]
         save(tmp_attrs, doc, rec)
@@ -96,6 +101,11 @@ defmodule ActiveResource.CouchDocumentAdd do
       end
 
       #private
+
+      defp mark_as_delete(doc, rec) do
+        save(attrs(doc) ++ [{"_deleted", true}], rec)
+      end
+
       defp proplist_attrs(attrs, doc, rec) do
         [__attributes__: attrs] ++ [{:__methods__, rec}]
       end
@@ -105,8 +115,8 @@ defmodule ActiveResource.CouchDocumentAdd do
       end
 
       defp save(proplist, doc, rec) do
+        ActiveResource.Utils.save_to_db(rec.db_name, proplist)
         proplist = proplist_attrs(proplist, doc, rec)
-        # ActiveResource.Utils.save_to_db(rec.db_name, proplist)
         doc.update(proplist)
       end
 
