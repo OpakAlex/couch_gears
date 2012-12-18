@@ -3,6 +3,7 @@ defmodule ActiveResource.CouchDocumentExtend do
     quote do
 
       import ActiveResource.Common
+
       defrecordp :document, unquote(opts)
 
       def body(body, rec) do
@@ -22,11 +23,11 @@ defmodule ActiveResource.CouchDocumentExtend do
       end
 
       def attrs(document(body: body)) do
-        HashDict.new(atom_keys(body))
+        HashDict.new(keys_to_atoms(body))
       end
 
       def has_field?(name, rec) do
-        :proplists.is_defined(to_binary(name), rec.body)
+        List.keymember?(rec.body, to_binary(name), 0)
       end
 
       def delete_document(rec) do
@@ -51,7 +52,7 @@ defmodule ActiveResource.CouchDocumentExtend do
       end
 
       defp remove_field(key, rec) do
-        :proplists.delete(to_binary(key), rec.body)
+        List.keydelete(rec.body, to_binary(key), 0)
       end
 
       def rename_field(name, new_name, rec) do
@@ -94,7 +95,7 @@ defmodule ActiveResource.CouchDocumentExtend do
 
 
       defp all_fields(rec) do
-        Enum.map :proplists.get_keys(rec.body), fn(x) ->
+        Enum.map Keyword.keys(rec.body), fn(x) ->
           binary_to_atom(x)
         end
       end

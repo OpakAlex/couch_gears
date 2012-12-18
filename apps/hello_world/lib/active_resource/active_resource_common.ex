@@ -1,6 +1,6 @@
 defmodule ActiveResource.Common do
 
-  def atom_keys(body) do
+  def keys_to_atoms(body) do
      Enum.map keys(body), fn(el) ->
        {el, get_value_from_json(to_binary(el), body)}
      end
@@ -11,7 +11,10 @@ defmodule ActiveResource.Common do
    end
 
    defp get_value_from_json(field, body) do
-     :proplists.get_value(field, body, :nil) #Keyword.get work only atom
+     case List.keyfind(body, field, 0) do
+       {key, value} -> value
+       nil -> :not_found
+     end
    end
 
    defp keys(body) do

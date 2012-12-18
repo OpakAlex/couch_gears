@@ -49,7 +49,7 @@ defmodule ActiveResourceTest do
   end
 
   test :without_fields do
-    assert @document.without_fields_to_json([:title, :genre, :label, :duration, :release_date, :total_tracks, :last_updated, :artist, :artist_id, :artist_uri, :_attachments]) == {[{"_rev", "2-15b8b3f4238233b35136c35b7db049e7"}, {"_id", "medianet:album:100049"}, {"type", "album"}]}
+    assert @document.without_fields_to_json([:title, :genre, :label, :duration, :release_date, :total_tracks, :last_updated, :artist, :artist_id, :artist_uri, :_attachments]) == {[{"_id", "medianet:album:100049"}, {"_rev", "2-15b8b3f4238233b35136c35b7db049e7"}, {"type", "album"}]}
   end
 
   test :to_json do
