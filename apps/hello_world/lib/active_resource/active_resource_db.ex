@@ -1,14 +1,9 @@
-# path = File.expand_path("../couch_document.ex", __FILE__)
-# Code.load_file path
-
-defmodule ActiveResource.Utils do
-  import ActiveResource.CouchDocument
-
-  def find(db_name, id) do
+defmodule ActiveResource.Db do
+  def get(db_name, id) do
     case :couch_db.open_doc(get_db(db_name), id) do
       {ok, doc} ->
         {body} = :couch_doc.to_json_obj(doc, [])
-        parse_to_record(body, db_name)
+        ActiveResource.CouchDocument.parse_to_record(body, db_name)
       _ -> :not_found
     end
   end

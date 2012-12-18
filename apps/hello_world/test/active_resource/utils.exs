@@ -1,5 +1,5 @@
-defmodule ActiveResourceTest do
-  def find(db_name, id) do
+defmodule ActiveResourceTestUtil do
+  def get(db_name, id) do
     body = [{"_id","medianet:album:100049"},
                  {"_rev","2-15b8b3f4238233b35136c35b7db049e7"},
                  {"type","album"},
@@ -22,6 +22,6 @@ defmodule ActiveResourceTest do
                      {"stub", true}
                    ]}
                  }]}}]
-    ActiveResource.CouchDocument.parse_to_record(body, "labeled")
+    ActiveResource.CouchDocument.parse_to_record(body, db_name)
   end
 end

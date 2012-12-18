@@ -1,15 +1,12 @@
-# path = File.expand_path("../couch_document_add.ex", __FILE__)
-# Code.load_file path
-
 defmodule ActiveResource.CouchDocument do
-  use ActiveResource.CouchDocumentAdd, [db_name: nil]
+  use ActiveResource.CouchDocumentExtend, [db_name: nil, body: nil]
+
+  defdelegate get(db_name, id), to: ActiveResource.Db
+  defdelegate save_to_db(db_name, body), to: ActiveResource.Db
 
   def parse_to_record(body, db_name) do
     document = document.db_name(db_name)
-    document.new(body)
+    document.body(body)
   end
 
-  defp get_value_from_json(field, body) do
-    :proplists.get_value(field, body, :nil)
-  end
 end
