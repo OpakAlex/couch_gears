@@ -1,9 +1,8 @@
 defmodule ActiveResource.Db do
-
   defdelegate parse_to_record(body, db_name), to: ActiveResource.CouchDocument
 
   def get(db_name, id) do
-      parse_to_record(get_body(), db_name)
+    parse_to_record(get_body(), db_name)
   end
 
   def save_to_db(db_name, body) do

@@ -15,6 +15,7 @@ defmodule ApplicationRouter do
 
   get "/" do
     doc = ActiveResource.CouchDocument.get("kiosk-mini","medianet:track:10000017")
-    conn.resp_body([{:ok, doc.fields_to_json([:_id, :_rev, :type])}], :json)
+    res = [{:ok, doc.fields_to_json([:_id, :_rev, :type])}]
+    conn.resp_body(res, :json)
   end
 end
