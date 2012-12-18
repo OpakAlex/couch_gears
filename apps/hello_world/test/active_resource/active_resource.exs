@@ -4,7 +4,7 @@ Code.require_file "../utils.exs", __FILE__
 defmodule ActiveResourceTest do
   use ExUnit.Case, async: false
 
-  @document ActiveResourceTestUtil.get("labeled", "labeled")
+  @document ActiveResource.CouchDocument.get("labeled", "medianet:album:100049")
 
   test :set_db_name do
     assert @document.db_name == "labeled"
