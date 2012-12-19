@@ -10,27 +10,27 @@ defmodule ActiveResource.Common do
     [{to_binary(k), v}]
    end
 
-   defp get_value_from_json(field, body) do
-     case List.keyfind(body, field, 0) do
-       {key, value} -> value
-       nil -> :not_found
-     end
-   end
-
-   defp keys(body) do
-     List.flatten(key_to_atom(Keyword.keys(body)))
-   end
-
-   defp key_to_atom([]) do
+   def key_to_atom([]) do
       []
     end
 
-    defp key_to_atom([h|t]) do
+    def key_to_atom([h|t]) do
       key_to_atom(h) ++ key_to_atom(t)
     end
 
-    defp key_to_atom(key) do
+    def key_to_atom(key) do
       [binary_to_atom(key, :utf8)]
+    end
+
+    def get_value_from_json(field, body) do
+      case List.keyfind(body, to_binary(field), 0) do
+        {key, value} -> value
+        nil -> :not_found
+      end
+    end
+
+    defp keys(body) do
+      List.flatten(key_to_atom(Keyword.keys(body)))
     end
 
 end

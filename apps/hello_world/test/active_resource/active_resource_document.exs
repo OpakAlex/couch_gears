@@ -56,4 +56,8 @@ defmodule ActiveResourceTest do
     assert @document.to_json() == {@document.body}
   end
 
+  test :design? do
+    assert @document.design? == false
+  end
+
 end

@@ -14,7 +14,9 @@ defmodule ApplicationRouter do
 
 
   get "/" do
-    doc = ActiveResource.CouchDocument.get("kiosk-mini","medianet:track:10000017")
+    design_document = ActiveResource.DesignDocument.get("labeled", "_design/tracks")
+    design_document.create_view(:all, {"map", "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"})
+    doc = ActiveResource.CouchDocument.get("labeled","medianet:album:100135")
     res = [{:ok, doc.fields_to_json([:_id, :_rev, :type])}]
     conn.resp_body(res, :json)
   end

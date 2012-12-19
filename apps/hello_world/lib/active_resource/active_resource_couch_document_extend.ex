@@ -6,6 +6,8 @@ defmodule ActiveResource.CouchDocumentExtend do
 
       defrecordp :document, unquote(opts)
 
+      use ActiveResource.DesignDocumentExtend
+
       def body(body, rec) do
         document(rec, body: body)
       end
@@ -86,6 +88,10 @@ defmodule ActiveResource.CouchDocumentExtend do
       def to_json(rec) do
         {rec.body}
       end
+
+      # def has_view?(rec) do
+        # has_view(rec)
+      # end
 
       #private
 
