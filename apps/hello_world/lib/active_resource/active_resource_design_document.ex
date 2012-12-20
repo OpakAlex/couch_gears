@@ -39,21 +39,18 @@ defmodule ActiveResource.DesignDocument do
         end
         view_body = get_all_views(rec)
         view_body = view_body ++ [{to_binary(view), {[value]}}]
-        new_body = [{"views", {view_body}}] ++ remove_views(rec)
-        save(new_body, rec)
+        save_view(view_body, rec)
       end
 
       def update_view(view, value, rec) do
         view_body = remove_view(view, rec)
         view_body = view_body ++ [{to_binary(view), {[value]}}]
-        new_body = [{"views", {view_body}}] ++ remove_views(rec)
-        save(new_body, rec)
+        save_view(view_body, rec)
       end
 
       def delete_view(view, rec) do
         view_body = remove_view(view, rec)
-        new_body = [{"views", {view_body}}] ++ remove_views(rec)
-        save(new_body, rec)
+        save_view(view_body, rec)
       end
 
       def rename_view(view, new_name, rec) do
@@ -64,6 +61,11 @@ defmodule ActiveResource.DesignDocument do
 
 
       #private
+
+      defp save_view(view_body, rec) do
+        body = [{"views", {view_body}}] ++ remove_views(rec)
+        save(body, rec)
+      end
 
       defp remove_view(key, rec) do
         List.keydelete(get_all_views(rec), to_binary(key), 0)
