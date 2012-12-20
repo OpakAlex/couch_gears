@@ -6,7 +6,7 @@ defmodule ActiveResource.CouchDocumentExtend do
 
       defrecordp :document, unquote(opts)
 
-      use ActiveResource.DesignDocumentExtend
+      use ActiveResource.DesignDocument
 
       def body(body, rec) do
         document(rec, body: body)

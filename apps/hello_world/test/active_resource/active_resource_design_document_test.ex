@@ -3,7 +3,7 @@ Code.require_file "../utils.exs", __FILE__
 
 defmodule ActiveResourceDesignDocumentTest do
   use ExUnit.Case, async: false
-  @desing_document ActiveResource.DesignDocument.get("labeled", "_design/tracks")
+  @desing_document ActiveResource.CouchDocument.get("labeled", "_design/tracks")
 
   test :design? do
     assert @desing_document.design? == true

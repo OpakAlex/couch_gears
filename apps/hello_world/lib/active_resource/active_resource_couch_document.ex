@@ -9,4 +9,10 @@ defmodule ActiveResource.CouchDocument do
     document.body(body)
   end
 
+  def create_document(db_name, body) do
+    document = document.db_name(db_name)
+    save_to_db(db_name, body)
+    document.body(body)
+  end
+
 end
