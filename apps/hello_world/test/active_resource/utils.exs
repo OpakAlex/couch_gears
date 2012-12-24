@@ -1,13 +1,41 @@
-defmodule ActiveResource.Couch do
-  defdelegate parse_to_record(body, db_name), to: ActiveResource.CouchDocument
+defmodule CouchRecord.Db do
+  use CouchRecord.Db.Settings, [db_name: nil]
 
-  def get(db_name, id) do
-    parse_to_record(get_body(id), db_name)
+  def get_doc(db_name, id) do
+    parse_to_record(get_body(id), db_name, id)
   end
 
-  def save_to_db(db_name, body) do
+  def save!(db_name, body) do
     :ok
   end
+
+  def new(db_name) do
+    settings.db_name(db_name)
+  end
+
+  def db_exist?(db_name) do
+    case db_int(db_name) do
+      :no_db_file -> false
+      _ -> true
+    end
+  end
+
+    def db_int(db_name) do
+      true
+    end
+
+    def db_int(db_name, false) do
+      :no_db_file
+    end
+
+    def parse_to_record(body, db_name, id) do
+      if Regex.match?(%r/^_design/, id) do
+        CouchRecord.DesignDocument.parse_to_record(body, db_name)
+      else
+        CouchRecord.Document.parse_to_record(body, db_name)
+      end
+    end
+
 
   defp get_body(id) do
     if Regex.match?(%r/^_design/, id) do

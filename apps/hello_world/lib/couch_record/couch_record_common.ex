@@ -1,4 +1,4 @@
-defmodule ActiveResource.Common do
+defmodule CouchRecord.Common do
 
   def keys_to_atoms(body) do
      Enum.map keys(body), fn(el) ->
@@ -27,6 +27,11 @@ defmodule ActiveResource.Common do
         {key, value} -> value
         nil -> :not_found
       end
+    end
+
+    #list adds
+    def include?(array, value) do
+      Enum.find_value(array, fn(x) -> x == value end)
     end
 
     defp keys(body) do

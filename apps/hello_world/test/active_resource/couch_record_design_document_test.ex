@@ -1,9 +1,11 @@
 Code.require_file "../../test_helper.exs", __FILE__
 Code.require_file "../utils.exs", __FILE__
 
-defmodule ActiveResourceDesignDocumentTest do
+defmodule CouchRecordDesignDocumentTest do
   use ExUnit.Case, async: false
-  @desing_document ActiveResource.CouchDocument.get("labeled", "_design/tracks")
+
+  @db CouchRecord.Db.new("labeled")
+  @desing_document @db.get("_design/tracks")
 
   test :design? do
     assert @desing_document.design? == true
