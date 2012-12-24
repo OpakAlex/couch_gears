@@ -60,7 +60,7 @@ defmacro __using__(opts) do
 
     defp save_view(view_body, rec) do
       body = [{"views", {view_body}}] ++ remove_views(rec)
-      save(body, rec)
+      save_record(body, rec)
     end
 
     defp remove_view(key, rec) do

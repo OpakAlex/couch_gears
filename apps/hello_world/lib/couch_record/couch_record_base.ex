@@ -2,6 +2,11 @@ defmodule CouchRecord.Base do
   defmacro __using__(opts) do
     quote do
 
+    defexception Save.Error, [reason: nil] do
+      def message(exception) do
+        "#{exception}"
+      end
+    end
       #helper functions
       import CouchRecord.Common
 
@@ -41,8 +46,8 @@ defmodule CouchRecord.Base do
       end
 
       def remove_document(rec) do
-        mark_as_delete_and_save(rec)
-        :ok
+        mark_as_delete(rec)
+        rec
       end
 
       def put(key, value, rec) do
@@ -62,11 +67,29 @@ defmodule CouchRecord.Base do
         value = rec.attrs[name]
         body = remove_field(name, rec)
         rec = rec.body(body)
-        rec.create(new_name, value)
+        create(new_name, value, rec)
+      end
+
+      def save!(rec) do
+        case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
+          :ok -> true
+          _ -> raise Save.Error, reason: "you have some errors in you document"
+        end
+      end
+
+      def save(rec) do
+        case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
+          :ok -> rec
+          _ -> false
+        end
       end
 
       def design?(rec) do
         Regex.match?(%r/^_design/, rec.attrs[:_id])
+      end
+
+      def save_record(body, rec) do
+        rec.body(body)
       end
 
       #private
@@ -75,34 +98,25 @@ defmodule CouchRecord.Base do
         List.keydelete(rec.body, to_binary(key), 0)
       end
 
-      def create(key, value, rec) do
+      defp create(key, value, rec) do
         body = rec.body ++ to_binary_field([{key, value}])
         save_record(body, rec)
       end
 
-      def update(key, value, rec) do
+      defp update(key, value, rec) do
         body = remove_field(key, rec)
         body = body ++ [{to_binary(key), value}]
         save_record(body, rec)
       end
 
-      defp mark_as_delete_and_save(rec) do
-        save(rec.body ++ [{"_deleted", true}], rec)
+      defp mark_as_delete(rec) do
+        save_record(rec.body ++ [{"_deleted", true}], rec)
       end
 
       defp all_fields(rec) do
         Enum.map Keyword.keys(rec.body), fn(x) ->
           binary_to_atom(x)
         end
-      end
-
-      defp save(body, rec) do
-        save!(rec.db_name, body)
-        rec.body(body)
-      end
-
-      defp save_record(body,rec) do
-        rec.body(body)
       end
 
     end

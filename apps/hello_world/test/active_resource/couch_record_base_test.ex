@@ -43,4 +43,13 @@ defmodule CouchRecord.BaseTest do
     update_doc = @document.rename(:type, :new_type)
     assert update_doc.attrs[:new_type] == "album"
   end
+
+  test :save! do
+    assert @document.save! == true
+  end
+
+  test :save do
+    assert @document.save == @document
+  end
+
 end
