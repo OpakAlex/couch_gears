@@ -4,7 +4,7 @@ defmodule CouchRecord.Design.Document do
       defrecordp :document, unquote(opts)
 
       use CouchRecord.Base
-      use CouchRecord.Design.Abstract
+      use CouchRecord.Design.Base
     end
   end
 end

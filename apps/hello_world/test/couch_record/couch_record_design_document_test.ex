@@ -11,6 +11,7 @@ defmodule CouchRecordDesignDocumentTest do
     assert @desing_document.design? == true
   end
 
+
   test :design_id do
     assert @desing_document.attrs[:_id] == "_design/tracks"
   end
@@ -32,26 +33,26 @@ defmodule CouchRecordDesignDocumentTest do
   end
 
   test :create_view do
-    create_design_document = @desing_document.create_view(:test, {"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
+    create_design_document = @desing_document.put(:view, :test, {"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
     assert create_design_document.view_body(:test) == [{"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"}]
   end
 
   test :update_view do
-    update_desing_document = @desing_document.update_view(:all, {"map", "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"})
+    update_desing_document = @desing_document.put(:view, :all, {"map", "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"})
     assert update_desing_document.view_body(:all) == [{"map", "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"}]
   end
 
   test :delete_view do
-    create_design_document = @desing_document.create_view(:test, {"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
+    create_design_document = @desing_document.put(:view, :test, {"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
     assert create_design_document.has_view?(:test) == true
-    create_design_document = create_design_document.delete_view(:test)
+    create_design_document = create_design_document.remove(:view, :test)
     assert create_design_document.has_view?(:test) == false
   end
 
   test :rename_view do
-    create_design_document = @desing_document.create_view(:test, {"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
+    create_design_document = @desing_document.put(:view, :test, {"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
     assert create_design_document.has_view?(:test) == true
-    rename_disign_document = create_design_document.rename_view(:test, :rename_test)
+    rename_disign_document = create_design_document.rename(:view, :test, :rename_test)
     assert rename_disign_document.has_view?(:test) == false
     assert rename_disign_document.has_view?(:rename_test) == true
   end

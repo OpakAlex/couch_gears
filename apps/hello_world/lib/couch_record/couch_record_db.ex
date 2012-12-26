@@ -83,7 +83,7 @@ defmodule CouchRecord.Db do
 
   def parse_to_record(body, db_name, id) do
     if Regex.match?(%r/^_design/, id) do
-      CouchRecord.DesignDocument.parse_to_record(body, db_name)
+      CouchRecord.Design.Document.parse_to_record(body, db_name)
     else
       CouchRecord.Document.parse_to_record(body, db_name)
     end
