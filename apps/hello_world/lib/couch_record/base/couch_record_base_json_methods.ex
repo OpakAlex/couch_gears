@@ -1,5 +1,5 @@
 defmodule CouchRecord.Base.JsonMethods do
-  defmacro __using__(opts) do
+  defmacro __using__([]) do
     quote do
 
       def attrs_to_json(fields, rec) do

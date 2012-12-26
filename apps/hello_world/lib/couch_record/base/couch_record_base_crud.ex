@@ -1,5 +1,5 @@
 defmodule CouchRecord.Base.CRUD do
-  defmacro __using__(opts) do
+  defmacro __using__([]) do
     quote do
 
       defexception Save.Error, [reason: nil] do

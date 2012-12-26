@@ -1,5 +1,5 @@
 defmodule CouchRecord.Base.DocAttrs do
-  defmacro __using__(opts) do
+  defmacro __using__([]) do
     quote do
 
       def _id(rec) do

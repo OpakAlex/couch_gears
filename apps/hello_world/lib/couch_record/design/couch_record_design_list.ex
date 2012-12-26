@@ -1,5 +1,5 @@
 defmodule CouchRecord.Design.List do
-  defmacro __using__(opts) do
+  defmacro __using__([]) do
     quote do
 
       def lists(rec) do

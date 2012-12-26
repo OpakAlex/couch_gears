@@ -1,5 +1,5 @@
 defmodule CouchRecord.Base.Document do
-  defmacro __using__(opts) do
+  defmacro __using__([]) do
     quote do
 
       defdelegate get_doc(db_name, id), to: CouchRecord.Db

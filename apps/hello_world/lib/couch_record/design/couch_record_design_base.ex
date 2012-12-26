@@ -1,5 +1,5 @@
 defmodule CouchRecord.Design.Base do
-  defmacro __using__(opts) do
+  defmacro __using__([]) do
     quote do
 
       #crud
