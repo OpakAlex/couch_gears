@@ -24,7 +24,7 @@ defmodule CouchRecordDesignDocumentTest do
   end
 
   test :views do
-    assert @desing_document.views ==  [:all,:any]
+    assert @desing_document.views ==  [:any,:all]
   end
 
   test :view_body do

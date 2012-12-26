@@ -10,16 +10,16 @@ defmodule CouchRecord.Common do
     [{to_binary(k), v}]
    end
 
-   def key_to_atom([]) do
-      []
+   def key_to_atom([], acc) do
+      acc
     end
 
-    def key_to_atom([h|t]) do
-      key_to_atom(h) ++ key_to_atom(t)
+    def key_to_atom([h|t], acc) do
+      key_to_atom(t, [binary_to_atom(h, :utf8) | acc])
     end
 
-    def key_to_atom(key) do
-      [binary_to_atom(key, :utf8)]
+    def key_to_atom(keys) do
+      key_to_atom(keys, [])
     end
 
     def get_value_from_json(field, body) do
@@ -35,7 +35,7 @@ defmodule CouchRecord.Common do
     end
 
     defp keys(body) do
-      List.flatten(key_to_atom(Keyword.keys(body)))
+      key_to_atom(Keyword.keys(body))
     end
 
 end
