@@ -8,13 +8,13 @@ defmodule CouchRecord.Base do
       end
     end
       #helper functions
-      import CouchRecord.BaseCommon
+      import CouchRecord.Base.Common
 
       #include attrs functions for record
-      use CouchRecord.DocAttrs
+      use CouchRecord.Base.DocAttrs
 
       #include json_methods
-      use CouchRecord.JsonMethods
+      use CouchRecord.Base.JsonMethods
 
       def body(body, rec) do
         doc = document(rec, body: body)

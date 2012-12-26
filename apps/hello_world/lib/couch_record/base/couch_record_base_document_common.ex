@@ -1,4 +1,4 @@
-defmodule CouchRecord.DocumentCommon do
+defmodule CouchRecord.Base.DocumentCommon do
   defmacro __using__(opts) do
     quote do
 

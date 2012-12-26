@@ -11,5 +11,5 @@ end
 defmodule CouchRecord.Document do
   use CouchRecord.Document, [db_name: nil, body: nil, attrs: nil]
 
-  use CouchRecord.DocumentCommon
+  use CouchRecord.Base.DocumentCommon
 end

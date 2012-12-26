@@ -1,4 +1,4 @@
-defmodule CouchRecord.JsonMethods do
+defmodule CouchRecord.Base.JsonMethods do
   defmacro __using__(opts) do
     quote do
 

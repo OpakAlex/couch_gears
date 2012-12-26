@@ -1,4 +1,4 @@
-defmodule CouchRecord.AbstractDesignDocument do
+defmodule CouchRecord.Design.Abstract do
 defmacro __using__(opts) do
   quote do
     def has_view?(rec) do
