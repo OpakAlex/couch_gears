@@ -1,4 +1,4 @@
-defmodule CouchRecord.Common do
+defmodule CouchRecord.BaseCommon do
 
   def keys_to_atoms(body) do
      Enum.map keys(body), fn(el) ->

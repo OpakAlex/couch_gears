@@ -8,7 +8,7 @@ defmodule CouchRecord.Base do
       end
     end
       #helper functions
-      import CouchRecord.Common
+      import CouchRecord.BaseCommon
 
       #include attrs functions for record
       use CouchRecord.DocAttrs

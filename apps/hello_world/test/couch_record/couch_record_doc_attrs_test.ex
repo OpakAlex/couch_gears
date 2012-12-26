@@ -1,7 +1,7 @@
 Code.require_file "../../test_helper.exs", __FILE__
 Code.require_file "../utils.exs", __FILE__
 
-defmodule CouchRecord.DocAttrs do
+defmodule CouchRecord.DocAttrsTest do
   use ExUnit.Case, async: false
 
   @db CouchRecord.Db.new("labeled")
