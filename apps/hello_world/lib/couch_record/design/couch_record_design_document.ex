@@ -10,7 +10,6 @@ defmodule CouchRecord.Design.Document do
 end
 
 defmodule CouchRecord.Design.Document do
-    use CouchRecord.Design.Document, [db_name: nil, body: nil, attrs: nil]
-
-    use CouchRecord.Base.Document
+  use CouchRecord.Design.Document, [db_name: nil, body: nil, attrs: nil]
+  use CouchRecord.Base.Document
 end
