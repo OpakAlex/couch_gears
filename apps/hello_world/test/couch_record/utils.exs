@@ -51,7 +51,29 @@ defmodule CouchRecord.Db do
                          "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"}]
                     }},
                   ]}
-      }]
+      },
+      {"shows",
+               {[{"one",
+                  {[{"map",
+                     "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"}]
+                }},
+                {"two",
+                    {[{"map",
+                       "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"}]
+                  }},
+                ]}
+    },
+    {"lists",
+             {[{"list1",
+                {[{"map",
+                   "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"}]
+              }},
+              {"list2",
+                  {[{"map",
+                     "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"}]
+                }},
+              ]}
+  }]
     else
       [{"_id","medianet:album:100049"},
                    {"_rev","2-15b8b3f4238233b35136c35b7db049e7"},

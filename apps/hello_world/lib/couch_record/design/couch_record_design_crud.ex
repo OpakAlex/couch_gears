@@ -2,49 +2,44 @@ defmodule CouchRecord.Design.CRUD do
   defmacro __using__(opts) do
     quote do
 
-      def put(:view, view, value, rec) do
-        unless rec.has_view? do
-          rec = rec.put([views: {[]}])
+      def put(:validation, key, value, rec) do
+
+      end
+
+      def put(type, name, value, rec) do
+        unless rec.exist?(type) do
+          rec = rec.put(type, {[]})
         end
-        if rec.has_view?(view) do
-          update(:view, view, value, rec)
+        if rec.exist?(type, name) do
+          update(type, name, value, rec)
         else
-          create(:view, view, value, rec)
+          create(type, name, value, rec)
         end
       end
 
-      def put(:show, key, value, rec) do
-
+      def remove(type, item, rec) do
+        body = List.keydelete(content(type, rec), to_binary(item), 0)
+        save_record(refresh_body(type, body, rec), rec)
       end
 
-      def put(:list, key, value, rec) do
-
-      end
-
-
-      def remove(:view, view, rec) do
-        body = List.keydelete(get_all_views(rec), to_binary(view), 0)
-        save_record(refresh_view_body(body, rec), rec)
-      end
-
-      def rename(:view, view, new_name, rec) do
-        [view_body | t] = rec.view_body(view)
-        rec = rec.remove(:view, view)
-        rec.put(:view, new_name, view_body)
+      def rename(type, item, new_name, rec) do
+        [view_body | t] = rec.body(type, item)
+        rec = rec.remove(type, item)
+        rec.put(type, new_name, view_body)
       end
 
 
-      #view CRUD
-      defp create(:view, view, value, rec) do
-        body = get_all_views(rec)
-        body = body ++ [{to_binary(view), {[value]}}]
-        save_record(refresh_view_body(body, rec), rec)
+      #private
+      defp create(type, item, value, rec) do
+        body = content(type, rec)
+        body = body ++ [{to_binary(item), {[value]}}]
+        save_record(refresh_body(type, body, rec), rec)
       end
 
-      defp update(:view, view, value, rec) do
-        body = List.keydelete(get_all_views(rec), to_binary(view), 0)
-        body = body ++ [{to_binary(view), {[value]}}]
-        save_record(refresh_view_body(body, rec), rec)
+      defp update(type, item, value, rec) do
+        body = List.keydelete(content(type, rec), to_binary(item), 0)
+        body = body ++ [{to_binary(item), {[value]}}]
+        save_record(refresh_body(type, body, rec), rec)
       end
 
     end
