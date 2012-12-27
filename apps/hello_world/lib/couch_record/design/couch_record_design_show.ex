@@ -3,7 +3,10 @@ defmodule CouchRecord.Design.Show do
     quote do
 
       def shows(rec) do
-        key_to_atom(Keyword.keys(content(:show, rec)))
+        case content(:show, rec) do
+          nil -> nil
+          body -> key_to_atom(Keyword.keys(body))
+        end
       end
 
     end

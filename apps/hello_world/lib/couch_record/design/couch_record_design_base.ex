@@ -14,6 +14,12 @@ defmodule CouchRecord.Design.Base do
       #list
       use CouchRecord.Design.List
 
+      #validate_doc_update
+      use CouchRecord.Design.Validation
+
+      #updates
+      use CouchRecord.Design.Update
+
       def exist?(type, rec) do
         rec.attr?(plural(:atom, type))
       end
@@ -43,8 +49,10 @@ defmodule CouchRecord.Design.Base do
       end
 
       def content(type, rec) do
-        {views_list} = rec.attrs[plural(:atom, type)]
-        views_list
+        case rec.attrs[plural(:atom, type)] do
+          nil -> nil
+          {body} -> body
+        end
       end
 
       defp plural(:atom, singl) do

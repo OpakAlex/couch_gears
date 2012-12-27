@@ -52,4 +52,14 @@ defmodule CouchRecordDesignBaseTest do
     assert rename_disign_document.exist?(:show, :rename_test) == true
   end
 
+  test :validate_doc_update do
+    assert @desing_document.validate_doc_update == nil
+    validation_doc =  @desing_document.put(:validate_doc_update, "function(newDoc, oldDoc, userCtx, secObj) {if (newDoc.address === undefined) {}")
+    assert validation_doc.validate_doc_update == "function(newDoc, oldDoc, userCtx, secObj) {if (newDoc.address === undefined) {}"
+  end
+
+  test :update_functions do
+    assert @desing_document.updates == nil
+  end
+
 end

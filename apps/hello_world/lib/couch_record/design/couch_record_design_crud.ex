@@ -2,10 +2,6 @@ defmodule CouchRecord.Design.CRUD do
   defmacro __using__([]) do
     quote do
 
-      def put(:validation, key, value, rec) do
-
-      end
-
       def put(type, name, value, rec) do
         unless rec.exist?(type) do
           rec = rec.put(type, {[]})
