@@ -48,7 +48,7 @@ defmodule CouchRecord.Base do
         Regex.match?(%r/^_design/, rec.attrs[:_id])
       end
 
-      def save_record(body, rec) do
+      def apply_changes(body, rec) do
         rec.body(body)
       end
 

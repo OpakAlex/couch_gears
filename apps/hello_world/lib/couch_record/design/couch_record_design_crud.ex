@@ -15,7 +15,7 @@ defmodule CouchRecord.Design.CRUD do
 
       def remove(type, item, rec) do
         body = List.keydelete(content(type, rec), to_binary(item), 0)
-        save_record(refresh_body(type, body, rec), rec)
+        apply_changes(refresh_body(type, body, rec), rec)
       end
 
       def rename(type, item, new_name, rec) do
@@ -29,13 +29,13 @@ defmodule CouchRecord.Design.CRUD do
       defp create(type, item, value, rec) do
         body = content(type, rec)
         body = body ++ [{to_binary(item), {[value]}}]
-        save_record(refresh_body(type, body, rec), rec)
+        apply_changes(refresh_body(type, body, rec), rec)
       end
 
       defp update(type, item, value, rec) do
         body = List.keydelete(content(type, rec), to_binary(item), 0)
         body = body ++ [{to_binary(item), {[value]}}]
-        save_record(refresh_body(type, body, rec), rec)
+        apply_changes(refresh_body(type, body, rec), rec)
       end
 
     end

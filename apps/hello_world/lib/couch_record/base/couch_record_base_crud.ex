@@ -18,7 +18,7 @@ defmodule CouchRecord.Base.CRUD do
 
       def remove(key, rec) do
         body = remove_field(key, rec)
-        save_record(body, rec)
+        apply_changes(body, rec)
       end
 
       def rename(name, new_name, rec) do
@@ -48,7 +48,7 @@ defmodule CouchRecord.Base.CRUD do
       end
 
       def mark_as_delete(rec) do
-        save_record(rec.body ++ [{"_deleted", true}], rec)
+        apply_changes(rec.body ++ [{"_deleted", true}], rec)
       end
 
       def remove_field(key, rec) do
@@ -59,13 +59,13 @@ defmodule CouchRecord.Base.CRUD do
 
       defp create(key, value, rec) do
         body = rec.body ++ to_binary_field([{key, value}])
-        save_record(body, rec)
+        apply_changes(body, rec)
       end
 
       defp update(key, value, rec) do
         body = remove_field(key, rec)
         body = body ++ [{to_binary(key), value}]
-        save_record(body, rec)
+        apply_changes(body, rec)
       end
 
 
