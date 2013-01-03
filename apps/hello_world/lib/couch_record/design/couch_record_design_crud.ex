@@ -24,7 +24,6 @@ defmodule CouchRecord.Design.CRUD do
         rec.put(type, new_name, view_body)
       end
 
-
       #private
       defp create(type, item, value, rec) do
         body = content(type, rec)

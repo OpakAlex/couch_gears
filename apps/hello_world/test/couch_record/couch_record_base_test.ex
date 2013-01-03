@@ -29,8 +29,8 @@ defmodule CouchRecord.BaseTest do
   end
 
   test :update do
-      update_doc = @document.put(:type, "test_update")
-      assert update_doc.attrs[:type] == "test_update"
+    update_doc = @document.put(:type, "test_update")
+    assert update_doc.attrs[:type] == "test_update"
   end
 
   test :remove do

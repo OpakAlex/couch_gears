@@ -9,28 +9,23 @@ defmodule CouchRecord.Base.CRUD do
       end
 
       def put(key, value, rec) do
-        if rec.attr?(key) do
-          update(key, value, rec)
-        else
-          create(key, value, rec)
-        end
+        rec = rec.attrs(Dict.put(rec.attrs, key, value))
+        apply_changes(rec)
       end
 
       def remove(key, rec) do
-        body = remove_field(key, rec)
-        apply_changes(body, rec)
+        rec = rec.attrs(Dict.delete(rec.attrs, key))
+        apply_changes(rec)
       end
 
       def rename(name, new_name, rec) do
         value = rec.attrs[name]
-        body = remove_field(name, rec)
-        rec = rec.body(body)
-        create(new_name, value, rec)
+        rec = rec.attrs(Dict.delete(rec.attrs, name))
+        rec.put(new_name, value)
       end
 
       def remove_document(rec) do
-        mark_as_delete(rec)
-        rec
+        rec.put(:_deleted, true)
       end
 
       def save!(rec) do
@@ -46,31 +41,6 @@ defmodule CouchRecord.Base.CRUD do
           _ -> false
         end
       end
-
-      def mark_as_delete(rec) do
-        apply_changes(rec.body ++ [{"_deleted", true}], rec)
-      end
-
-      def remove_field(key, rec) do
-        List.keydelete(rec.body, to_binary(key), 0)
-      end
-
-      #private
-
-      defp create(key, value, rec) do
-        body = rec.body ++ to_binary_field([{key, value}])
-        apply_changes(body, rec)
-      end
-
-      defp update(key, value, rec) do
-        body = remove_field(key, rec)
-        body = body ++ [{to_binary(key), value}]
-        apply_changes(body, rec)
-      end
-
-
-
     end
-
   end
 end

@@ -16,12 +16,16 @@ defmodule CouchRecord.Base do
       use CouchRecord.Base.JsonMethods
 
       def body(body, rec) do
-        doc = document(rec, body: body)
-        doc.attrs(body)
+        document(rec, body: body)
       end
 
-      def attrs(body, rec) do
-        document(rec, attrs: HashDict.new(keys_to_atoms(body)))
+      def new(body, rec) do
+        doc = document(rec, body: body)
+        doc.attrs(HashDict.new(keys_to_atoms(body)))
+      end
+
+      def attrs(dict, rec) do
+        document(rec, attrs: dict)
       end
 
       def body(document(body: body)) do
@@ -41,23 +45,24 @@ defmodule CouchRecord.Base do
       end
 
       def attr?(name, rec) do
-        List.keymember?(rec.body, to_binary(name), 0)
+        Dict.has_key?(rec.attrs, name)
       end
 
       def design?(rec) do
         Regex.match?(%r/^_design/, rec.attrs[:_id])
       end
 
+      def apply_changes(rec) do
+        rec.body(to_list_binary(rec.attrs))
+      end
+
       def apply_changes(body, rec) do
-        rec.body(body)
+        rec.new(body)
       end
 
       #private
-
-      defp all_fields(rec) do
-        Enum.map Keyword.keys(rec.body), fn(x) ->
-          binary_to_atom(x)
-        end
+      defp keys(rec) do
+        rec.attrs.keys()
       end
 
     end

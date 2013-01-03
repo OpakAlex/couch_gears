@@ -22,6 +22,12 @@ defmodule CouchRecord.Base.Common do
       key_to_atom(keys, [])
     end
 
+    def to_list_binary(dict) do
+      Enum.map dict.keys(), fn(el) ->
+         {to_binary(el), dict[el]}
+       end
+    end
+
     def get_value_from_json(field, body) do
       case List.keyfind(body, to_binary(field), 0) do
         {key, value} -> value
