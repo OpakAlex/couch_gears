@@ -8,4 +8,9 @@ defmodule CouchRecord.Base.CommonTest do
     assert CouchRecord.Base.Common.key_to_atom(["_id","_rev"]) == [:_rev,:_id]
   end
 
+  test :to_atom do
+    assert CouchRecord.Base.Common.to_atom("test") == :test
+    assert CouchRecord.Base.Common.to_atom(:test) == :test
+  end
+
 end

@@ -5,7 +5,7 @@ defmodule CouchRecord.Base.Common do
     end
 
     def key_to_atom([h|t], acc) do
-      key_to_atom(t, [binary_to_atom(h, :utf8) | acc])
+      key_to_atom(t, [to_atom(h) | acc])
     end
 
     def key_to_atom(keys) do
@@ -28,6 +28,13 @@ defmodule CouchRecord.Base.Common do
     #list adds
     def include?(array, value) do
       Enum.find_value(array, fn(x) -> x == value end)
+    end
+
+    def to_atom(value) do
+      case is_atom(value) do
+        true -> value
+        false -> binary_to_atom(value)
+      end
     end
 
     defp keys(body) do
