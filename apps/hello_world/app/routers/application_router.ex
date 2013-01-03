@@ -16,7 +16,6 @@ defmodule ApplicationRouter do
   get "/" do
     document = CouchRecord.Db.new("labeled").get("medianet:album:100135")
 
-    # doc = ActiveResource.CouchDocument.get("labeled","medianet:album:100135")
     # res = [{:ok, doc.fields_to_json([:_id, :_rev, :type])}]
     conn.resp_body([{:ok, document._id}], :json)
   end

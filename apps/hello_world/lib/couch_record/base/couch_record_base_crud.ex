@@ -31,7 +31,7 @@ defmodule CouchRecord.Base.CRUD do
       def save!(rec) do
         case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
           :ok -> true
-          _ -> raise Save.Error, reason: "you have some errors in you document"
+          _ -> raise Save.Error, reason: "you have some errors in your document"
         end
       end
 

@@ -1,15 +1,5 @@
 defmodule CouchRecord.Base.Common do
 
-  def keys_to_atoms(body) do
-     Enum.map keys(body), fn(el) ->
-       {el, get_value_from_json(to_binary(el), body)}
-     end
-   end
-
-   def to_binary_field([{k,v}]) do
-    [{to_binary(k), v}]
-   end
-
    def key_to_atom([], acc) do
       acc
     end
