@@ -8,7 +8,7 @@ defmodule CouchRecordDesignShowTest do
   @desing_document @db.get("_design/tracks")
 
   test :shows do
-    assert @desing_document.shows ==  [:two,:one]
+    assert @desing_document.shows ==  [:one,:two]
   end
 
 end

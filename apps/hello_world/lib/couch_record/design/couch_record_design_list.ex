@@ -3,9 +3,9 @@ defmodule CouchRecord.Design.List do
     quote do
 
       def lists(rec) do
-        case content(:list, rec) do
+        case rec.attrs[:lists] do
           nil -> nil
-          body -> key_to_atom(Keyword.keys(body))
+          lists   -> lists.keys()
         end
       end
 

@@ -14,10 +14,11 @@ defmodule CouchRecord.Base.Common do
 
     def to_list_binary(dict) do
       Enum.map dict.keys(), fn(el) ->
-          case is_dict?(dict[el]) do
-            true -> {to_binary(el), {to_list_binary(dict[el])}}
-            false -> {to_binary(el), dict[el]}
-          end
+        element = dict[el]
+        case is_dict?(element) do
+          true -> {to_binary(el), {to_list_binary(element)}}
+          false -> {to_binary(el), element}
+        end
        end
     end
 

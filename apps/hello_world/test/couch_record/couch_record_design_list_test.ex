@@ -7,8 +7,8 @@ defmodule CouchRecordDesignListTest do
   @db CouchRecord.Db.new("labeled")
   @desing_document @db.get("_design/tracks")
 
-  test :shows do
-    assert @desing_document.lists ==  [:list2,:list1]
+  test :lists do
+    assert @desing_document.lists ==  [:list1,:list2]
   end
 
 end

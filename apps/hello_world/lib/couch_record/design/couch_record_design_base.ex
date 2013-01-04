@@ -40,7 +40,7 @@ defmodule CouchRecord.Design.Base do
       end
 
       def body(type, name, rec) do
-        {body} = get_value_from_json(name, content(type, rec))
+        {body} = rec.attrs[plural(:atom, type)][name]
         body
       end
 

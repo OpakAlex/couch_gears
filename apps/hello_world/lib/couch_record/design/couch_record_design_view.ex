@@ -3,9 +3,9 @@ defmodule CouchRecord.Design.View do
     quote do
 
       def views(rec) do
-        case content(:view, rec) do
+        case rec.attrs[:views] do
           nil -> nil
-          body -> key_to_atom(Keyword.keys(body))
+          views   -> views.keys()
         end
       end
 
