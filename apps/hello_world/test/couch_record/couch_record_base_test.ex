@@ -30,6 +30,8 @@ defmodule CouchRecord.BaseTest do
 
   test :update do
     update_doc = @document.put("type", "test_update")
+    IO.puts(inspect(@document.attrs))
+    IO.puts(inspect(update_doc.body))
     assert update_doc.attrs[:type] == "test_update"
   end
 

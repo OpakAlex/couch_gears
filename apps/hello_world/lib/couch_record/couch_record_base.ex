@@ -21,7 +21,7 @@ defmodule CouchRecord.Base do
 
       def new(body, rec) do
         doc = document(rec, body: body)
-        doc.attrs(HashDict.new(body, fn ({key, value}) -> {binary_to_atom(key), value} end))
+        doc.attrs(HashDict.new(body, dict_atom_func))
       end
 
       def attrs(dict, rec) do
@@ -63,6 +63,15 @@ defmodule CouchRecord.Base do
       #private
       defp keys(rec) do
         rec.attrs.keys()
+      end
+
+      defp dict_atom_func do
+        fn({key, value}) ->
+          case value do
+            {list_value} -> {binary_to_atom(key), HashDict.new(list_value, dict_atom_func)}
+            _ -> {binary_to_atom(key), value}
+          end
+        end
       end
 
     end

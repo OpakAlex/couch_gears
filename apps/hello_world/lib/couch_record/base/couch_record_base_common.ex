@@ -14,7 +14,10 @@ defmodule CouchRecord.Base.Common do
 
     def to_list_binary(dict) do
       Enum.map dict.keys(), fn(el) ->
-         {to_binary(el), dict[el]}
+          case is_dict?(dict[el]) do
+            true -> {to_binary(el), {to_list_binary(dict[el])}}
+            false -> {to_binary(el), dict[el]}
+          end
        end
     end
 
@@ -39,6 +42,13 @@ defmodule CouchRecord.Base.Common do
 
     defp keys(body) do
       key_to_atom(Keyword.keys(body))
+    end
+
+    defp is_dict?(value) do
+      case value do
+        {HashDict, _} -> true
+        _ -> false
+      end
     end
 
 end
