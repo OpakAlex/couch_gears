@@ -4,37 +4,33 @@ defmodule CouchRecord.Design.CRUD do
 
       def put(type, name, value, rec) do
         unless rec.exist?(type) do
-          rec = rec.put(type, {[]})
+          rec = rec.put(type, HashDict.new([]))
         end
-        if rec.exist?(type, name) do
-          update(type, name, value, rec)
-        else
-          create(type, name, value, rec)
-        end
+        put_design(type, name, value, rec)
       end
 
-      def remove(type, item, rec) do
-        body = List.keydelete(content(type, rec), to_binary(item), 0)
-        apply_changes(refresh_body(type, body, rec), rec)
+      def remove(type, name, rec) do
+        type = plural(:atom, type)
+        design_attrs = rec.attrs[type]
+        design_attrs = Dict.delete(design_attrs, to_atom(name))
+        rec = rec.attrs(Dict.put(rec.attrs, type, design_attrs))
+        apply_changes(rec)
       end
 
-      def rename(type, item, new_name, rec) do
-        [view_body | t] = rec.body(type, item)
-        rec = rec.remove(type, item)
-        rec.put(type, new_name, view_body)
+      def rename(type, name, new_name, rec) do
+        plural = plural(:atom, type)
+        value = rec.attrs[plural][name]
+        rec = rec.remove(type, name)
+        rec.put(type, new_name, value)
       end
 
       #private
-      defp create(type, item, value, rec) do
-        body = content(type, rec)
-        body = body ++ [{to_binary(item), {[value]}}]
-        apply_changes(refresh_body(type, body, rec), rec)
-      end
 
-      defp update(type, item, value, rec) do
-        body = List.keydelete(content(type, rec), to_binary(item), 0)
-        body = body ++ [{to_binary(item), {[value]}}]
-        apply_changes(refresh_body(type, body, rec), rec)
+      defp put_design(type, name, value, rec) do
+        type = plural(:atom, type)
+        design_attrs = Dict.put(rec.attrs[type], to_atom(name), {[value]})
+        rec = rec.attrs(Dict.put(rec.attrs, type, design_attrs))
+        apply_changes(rec)
       end
 
     end

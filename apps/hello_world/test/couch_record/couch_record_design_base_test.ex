@@ -34,8 +34,6 @@ defmodule CouchRecordDesignBaseTest do
 
   test :update do
     update_desing_document = @desing_document.put(:show, :one, {"map", "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"})
-    IO.puts(inspect(@desing_document.body))
-    IO.puts(inspect(update_desing_document.body))
     assert update_desing_document.body(:show, :one) == [{"map", "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"}]
   end
 

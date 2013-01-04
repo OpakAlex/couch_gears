@@ -26,8 +26,8 @@ defmodule CouchRecord.Design.Base do
 
       def exist?(type, name, rec) do
         if rec.exist?(type) do
-          case get_value_from_json(name, content(type, rec)) do
-            :not_found -> false
+          case rec.attrs[plural(:atom, type)][name] do
+            nil -> false
             _ -> true
           end
         else
@@ -49,13 +49,13 @@ defmodule CouchRecord.Design.Base do
       end
 
       def content(type, rec) do
-        case rec.attrs[plural(:atom, type)] do
-          nil -> nil
-          {body} -> body
-        end
-      end
+              # case rec.attrs[plural(:atom, type)] do
+                # nil -> nil
+                # {body} -> body
+              # end
+            end
 
-      defp plural(:atom, singl) do
+      def plural(:atom, singl) do
         binary_to_atom("#{to_binary(singl)}s")
       end
 
