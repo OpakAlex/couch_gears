@@ -28,19 +28,6 @@ defmodule CouchRecord.Base.CRUD do
         rec.put(:_deleted, true)
       end
 
-      def save!(rec) do
-        case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
-          :ok -> true
-          _ -> raise Save.Error, reason: "you have some errors in your document"
-        end
-      end
-
-      def save(rec) do
-        case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
-          :ok -> rec
-          _ -> false
-        end
-      end
     end
   end
 end

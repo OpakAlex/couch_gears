@@ -56,8 +56,18 @@ defmodule CouchRecord.Base do
         rec.body(to_list_binary(rec.attrs))
       end
 
-      def apply_changes(body, rec) do
-        rec.new(body)
+      def save!(rec) do
+        case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
+          :ok -> true
+          _ -> raise Save.Error, reason: "you have some errors in your document"
+        end
+      end
+
+      def save(rec) do
+        case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
+          :ok -> rec
+          _ -> false
+        end
       end
 
       #private
@@ -69,7 +79,7 @@ defmodule CouchRecord.Base do
         fn({key, value}) ->
           case value do
             {list_value} -> {binary_to_atom(key), HashDict.new(list_value, dict_atom_func)}
-            _ -> {binary_to_atom(key), value}
+                       _ -> {binary_to_atom(key), value}
           end
         end
       end

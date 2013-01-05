@@ -10,10 +10,10 @@ defmodule CouchRecord.Base.JsonMethods do
       end
 
       def without_attrs_to_json(fields, rec) do
-        fields = Enum.map keys(rec), fn(x) ->
-          case include?(fields, x) do
+        fields = Enum.map keys(rec), fn(field) ->
+          case include?(fields, field) do
             true -> []
-            nil -> x
+            nil -> field
           end
         end
         attrs_to_json(List.flatten(fields), rec)

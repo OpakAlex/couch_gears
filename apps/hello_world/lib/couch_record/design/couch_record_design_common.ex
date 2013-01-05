@@ -11,7 +11,7 @@ defmodule CouchRecord.Design.Common do
         fn({key, value}) ->
           case value do
             {list_value} ->
-              if (key == "views" || key == "lists" || key == "shows") do
+              if design_key?(key) do
                 {binary_to_atom(key), HashDict.new(list_value, dict_atom_func_last)}
               else
                 {binary_to_atom(key), HashDict.new(list_value, dict_atom_func)}
@@ -19,6 +19,10 @@ defmodule CouchRecord.Design.Common do
             _ -> {binary_to_atom(key), value}
           end
         end
+      end
+
+      defp design_key?(key) do
+        (key == "views" || key == "lists" || key == "shows")
       end
 
       defp dict_atom_func_last do
