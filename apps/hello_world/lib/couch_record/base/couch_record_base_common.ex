@@ -22,13 +22,6 @@ defmodule CouchRecord.Base.Common do
        end
     end
 
-    def get_value_from_json(field, body) do
-      case List.keyfind(body, to_binary(field), 0) do
-        {key, value} -> value
-        nil -> :not_found
-      end
-    end
-
     #list adds
     def include?(array, value) do
       Enum.find_value(array, fn(x) -> x == value end)
@@ -39,10 +32,6 @@ defmodule CouchRecord.Base.Common do
         true -> value
         false -> binary_to_atom(value)
       end
-    end
-
-    defp keys(body) do
-      key_to_atom(Keyword.keys(body))
     end
 
     defp is_dict?(value) do

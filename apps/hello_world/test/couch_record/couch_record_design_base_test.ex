@@ -32,6 +32,11 @@ defmodule CouchRecordDesignBaseTest do
     assert create_design_document.body(:show, :test) == [{"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"}]
   end
 
+  test :create_list do
+    create_design_document = @desing_document.put(:list, :test, {"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
+    assert create_design_document.body(:list, :test) == [{"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"}]
+  end
+
   test :update do
     update_desing_document = @desing_document.put(:show, :one, {"map", "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"})
     assert update_desing_document.body(:show, :one) == [{"map", "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"}]

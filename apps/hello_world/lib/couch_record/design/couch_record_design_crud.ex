@@ -4,7 +4,7 @@ defmodule CouchRecord.Design.CRUD do
 
       def put(type, name, value, rec) do
         unless rec.exist?(type) do
-          rec = rec.put(type, HashDict.new([]))
+          rec = rec.put(plural(:atom, type), HashDict.new([]))
         end
         put_design(type, name, value, rec)
       end
@@ -25,7 +25,6 @@ defmodule CouchRecord.Design.CRUD do
       end
 
       #private
-
       defp put_design(type, name, value, rec) do
         type = plural(:atom, type)
         design_attrs = Dict.put(rec.attrs[type], to_atom(name), {[value]})

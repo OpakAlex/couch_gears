@@ -68,20 +68,9 @@ defmodule CouchRecord.Base do
       defp dict_atom_func do
         fn({key, value}) ->
           case value do
-            {list_value} ->
-              if (key == "views" || key == "lists" || key == "shows") do
-                {binary_to_atom(key), HashDict.new(list_value, dict_atom_func_last)}
-              else
-                {binary_to_atom(key), HashDict.new(list_value, dict_atom_func)}
-              end
+            {list_value} -> {binary_to_atom(key), HashDict.new(list_value, dict_atom_func)}
             _ -> {binary_to_atom(key), value}
           end
-        end
-      end
-
-      defp dict_atom_func_last do
-        fn({key, value}) ->
-          {binary_to_atom(key), value}
         end
       end
 

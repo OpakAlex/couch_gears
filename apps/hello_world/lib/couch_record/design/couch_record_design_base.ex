@@ -44,23 +44,8 @@ defmodule CouchRecord.Design.Base do
         body
       end
 
-      def refresh_body(type, body, rec) do
-        body = [{plural(type), {body}}] ++ List.keydelete(rec.body, plural(type), 0)
-      end
-
-      def content(type, rec) do
-              # case rec.attrs[plural(:atom, type)] do
-                # nil -> nil
-                # {body} -> body
-              # end
-            end
-
       def plural(:atom, singl) do
         binary_to_atom("#{to_binary(singl)}s")
-      end
-
-      defp plural(singl) do
-        "#{to_binary(singl)}s"
       end
 
     end
