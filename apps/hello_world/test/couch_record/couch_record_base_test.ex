@@ -48,6 +48,10 @@ defmodule CouchRecord.BaseTest do
     assert @document.save! == true
   end
 
+  # test :save_with_error do
+    # assert @document.save == false
+  # end
+
   test :save do
     assert @document.save == @document
   end

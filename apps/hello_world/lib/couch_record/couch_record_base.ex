@@ -15,6 +15,9 @@ defmodule CouchRecord.Base do
       #include json_methods
       use CouchRecord.Base.JsonMethods
 
+      #errors
+     import CouchRecord.Base.Errors
+
       def body(body, rec) do
         document(rec, body: body)
       end
@@ -59,7 +62,7 @@ defmodule CouchRecord.Base do
       def save!(rec) do
         case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
           :ok -> true
-          _ -> raise Save.Error, reason: "you have some errors in your document"
+          _ -> raise SaveError
         end
       end
 

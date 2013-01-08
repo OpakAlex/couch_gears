@@ -2,12 +2,6 @@ defmodule CouchRecord.Base.CRUD do
   defmacro __using__([]) do
     quote do
 
-      defexception Save.Error, [reason: nil] do
-        def message(exception) do
-          "#{exception}"
-        end
-      end
-
       def put(key, value, rec) do
         rec = rec.attrs(Dict.put(rec.attrs, to_atom(key), value))
         apply_changes(rec)
