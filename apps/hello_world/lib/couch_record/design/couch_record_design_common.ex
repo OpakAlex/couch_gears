@@ -1,10 +1,8 @@
 defmodule CouchRecord.Design.Common do
   defmacro __using__([]) do
     quote do
-      def new(body, rec) do
-        doc = document(rec, body: body)
-        doc.attrs(HashDict.new(body, dict_atom_func))
-      end
+
+      defoverridable [dict_atom_func: 0]
 
       #private
       defp dict_atom_func do
