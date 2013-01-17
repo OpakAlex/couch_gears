@@ -1,6 +1,6 @@
 Code.require_file "../../../test_helper.exs", __FILE__
 
-defmodule CouchRecord.BaseTest do
+defmodule CouchRecord.Base.Test do
   use ExUnit.Case, async: false
 
   @db CouchRecord.Db.new("labeled")
@@ -41,18 +41,6 @@ defmodule CouchRecord.BaseTest do
   test :rename do
     update_doc = @document.rename(:type, :new_type)
     assert update_doc.attrs[:new_type] == "album"
-  end
-
-  test :save! do
-    assert @document.save! == true
-  end
-
-  # test :save_with_error do
-    # assert @document.save == false
-  # end
-
-  test :save do
-    assert @document.save.attrs == @document.attrs
   end
 
 end

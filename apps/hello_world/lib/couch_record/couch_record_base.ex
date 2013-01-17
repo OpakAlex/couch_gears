@@ -30,7 +30,7 @@ defmodule CouchRecord.Base do
 
       def new(body, rec) do
         doc = document(rec, body: body)
-        doc.attrs(HashDict.new(body, from_list_to_dic))
+        doc.attrs(HashDict.new(body, from_list_to_dic(rec)))
       end
 
       def body(document(body: body)) do

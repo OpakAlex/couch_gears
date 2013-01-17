@@ -7,10 +7,9 @@ defmodule CouchRecord.Base.Document do
         document.new(body)
       end
 
-      def create_document(db_name, body) do
-        document = document.db_name(db_name)
-        doc = document.new(body)
-        doc.save!
+      def create_document(body, db_name) do
+        document = parse_to_record(body, db_name)
+        document.save
       end
     end
   end
