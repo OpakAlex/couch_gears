@@ -3,13 +3,11 @@ defmodule CouchRecord.Base.CRUD do
     quote do
 
       def put(key, value, rec) do
-        rec = rec.attrs(Dict.put(rec.attrs, to_atom(key), value))
-        apply_changes(rec)
+        rec.attrs(Dict.put(rec.attrs, to_atom(key), value))
       end
 
       def remove(key, rec) do
-        rec = rec.attrs(Dict.delete(rec.attrs, to_atom(key)))
-        apply_changes(rec)
+        rec.attrs(Dict.delete(rec.attrs, to_atom(key)))
       end
 
       def rename(name, new_name, rec) do

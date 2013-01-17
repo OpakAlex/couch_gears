@@ -50,10 +50,6 @@ defmodule CouchRecord.Base do
         Regex.match?(%r/^_design/, rec.attrs[:_id])
       end
 
-      def apply_changes(rec) do
-        rec.body(to_list_binary(rec.attrs))
-      end
-
       #private
       defp keys(rec) do
         rec.attrs.keys()

@@ -52,7 +52,7 @@ defmodule CouchRecord.BaseTest do
   # end
 
   test :save do
-    assert @document.save == @document
+    assert @document.save.attrs == @document.attrs
   end
 
 end

@@ -10,10 +10,15 @@ defmodule CouchRecord.Base.Save do
         end
 
         def save(rec) do
+          rec = apply_changes(rec)
           case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
             :ok -> rec
             _ -> false
           end
+        end
+
+        defp apply_changes(rec) do
+          rec.body(to_list_binary(rec.attrs))
         end
 
       end
