@@ -20,6 +20,7 @@ defmodule CouchRecord.Design.Base do
       #updates
       use CouchRecord.Design.Update
 
+
       def exist?(type, rec) do
         rec.attr?(plural(:atom, type))
       end

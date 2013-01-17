@@ -2,8 +2,11 @@ defmodule CouchRecord.Base do
   defmacro __using__([]) do
     quote do
 
-      #helper functions
-      import CouchRecord.Base.Common
+      #common functions
+      use CouchRecord.Base.Common
+
+      #helpers
+      import CouchRecord.Base.Helpers
 
       #include attrs functions for record
       use CouchRecord.Base.DocAttrs
@@ -15,6 +18,9 @@ defmodule CouchRecord.Base do
       #include json_methods
       use CouchRecord.Base.JsonMethods
 
+      #include save methods
+      use CouchRecord.Base.Save
+
       #errors
      import CouchRecord.Base.Errors
 
@@ -25,10 +31,6 @@ defmodule CouchRecord.Base do
       def new(body, rec) do
         doc = document(rec, body: body)
         doc.attrs(HashDict.new(body, from_list_to_dic))
-      end
-
-      def attrs(dict, rec) do
-        document(rec, attrs: dict)
       end
 
       def body(document(body: body)) do
@@ -43,13 +45,6 @@ defmodule CouchRecord.Base do
         document(rec, db_name: db_name)
       end
 
-      def attrs(document(attrs: attrs)) do
-        attrs
-      end
-
-      def attr?(name, rec) do
-        Dict.has_key?(rec.attrs, name)
-      end
 
       def design?(rec) do
         Regex.match?(%r/^_design/, rec.attrs[:_id])
@@ -59,32 +54,9 @@ defmodule CouchRecord.Base do
         rec.body(to_list_binary(rec.attrs))
       end
 
-      def save!(rec) do
-        case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
-          :ok -> true
-          _ -> raise SaveError
-        end
-      end
-
-      def save(rec) do
-        case CouchRecord.Db.save!(rec.db_name, rec.to_json()) do
-          :ok -> rec
-          _ -> false
-        end
-      end
-
       #private
       defp keys(rec) do
         rec.attrs.keys()
-      end
-
-      defp from_list_to_dic do
-        fn({key, value}) ->
-          case value do
-            {list_value} -> {binary_to_atom(key), HashDict.new(list_value, from_list_to_dic)}
-                       _ -> {binary_to_atom(key), value}
-          end
-        end
       end
 
     end

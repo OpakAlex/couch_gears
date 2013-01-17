@@ -2,10 +2,8 @@ defmodule CouchRecord.Base.Document do
   defmacro __using__([]) do
     quote do
 
-      defdelegate get_doc(db_name, id), to: CouchRecord.Db
-
       def parse_to_record(body, db_name) do
-        document = var!(document).db_name(db_name)
+        document = document.db_name(db_name)
         document.new(body)
       end
 
