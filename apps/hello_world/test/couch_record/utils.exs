@@ -1,7 +1,7 @@
 defmodule CouchRecord.Db do
   use CouchRecord.Db.Settings, [db_name: nil]
 
-  def get_doc(db_name, id) do
+  def open({db_name, id}) do
     parse_to_record(get_body(id), db_name, id)
   end
 

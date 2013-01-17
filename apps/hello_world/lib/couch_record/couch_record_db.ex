@@ -13,7 +13,7 @@ defmodule CouchRecord.Db.Settings do
       end
 
       def open(doc_id, rec) do
-        CouchRecord.Db.get_doc(rec.db_name, doc_id)
+        CouchRecord.Db.open({rec.db_name, doc_id})
       end
 
       def get(doc_id, rec) do
@@ -43,6 +43,8 @@ end
 defmodule CouchRecord.Db do
   use CouchRecord.Db.Settings, [db_name: nil]
 
+  defdelegate get(prop), to: CouchRecord.Db, as: open(prop)
+
   def new(db_name) do
     settings.db_name(db_name)
   end
@@ -54,7 +56,7 @@ defmodule CouchRecord.Db do
     end
   end
 
-  def get_doc(db_name, id) do
+  def open({db_name, id}) do
     case db_int(db_name) do
       :no_db_file -> :no_db_file
       db ->
