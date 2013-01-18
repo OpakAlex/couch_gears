@@ -3,9 +3,9 @@ defmodule CouchRecord.Design.Document do
     quote do
       defrecordp :document, unquote(opts)
 
+      import CouchRecord.Design.Common
       use CouchRecord.Base
       use CouchRecord.Design.Base
-      use CouchRecord.Design.Common
 
     end
   end

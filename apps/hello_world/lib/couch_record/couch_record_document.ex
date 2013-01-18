@@ -2,6 +2,8 @@ defmodule CouchRecord.Document do
   defmacro __using__(opts) do
     quote do
       defrecordp :document, unquote(opts)
+
+      import CouchRecord.Base.Common
       use CouchRecord.Base
     end
   end
