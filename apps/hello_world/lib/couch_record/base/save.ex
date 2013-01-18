@@ -28,8 +28,8 @@ defmodule CouchRecord.Base.Save do
       @doc """
       returns couchdb touple fron HashDict with CRUD changes
       """
-      defp apply_changes(rec) do
-        rec.body(to_list_binary(rec.attrs))
+      def apply_changes(rec) do
+        rec.body(dict_to_list(rec.attrs))
       end
 
     end

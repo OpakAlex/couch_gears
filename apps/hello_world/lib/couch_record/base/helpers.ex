@@ -21,11 +21,11 @@ defmodule CouchRecord.Base.Helpers do
   @doc """
   return touple with binary keys from HashDict
   """
-  def to_list_binary(dict) do
+  def dict_to_list(dict) do
     Enum.map dict.keys(), fn(el) ->
       element = dict[el]
       case is_hash_dict?(element) do
-        true -> {to_binary(el), {to_list_binary(element)}}
+        true -> {to_binary(el), {dict_to_list(element)}}
         false -> {to_binary(el), element}
       end
     end

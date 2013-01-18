@@ -26,15 +26,14 @@ defmodule CouchRecord.Design.Common do
   @doc """
   this function check for system fields in design document
   """
-
-  defp design_key?(key) do
+  def design_key?(key) do
     (key == "views" || key == "lists" || key == "shows" || key == "updates")
   end
 
   @doc """
   This is not recursion from_list_to_dic function, use only as private function
   """
-  defp from_list_to_dic_last do
+  def from_list_to_dic_last do
     fn({key, value}) ->
       {binary_to_atom(key), value}
     end
