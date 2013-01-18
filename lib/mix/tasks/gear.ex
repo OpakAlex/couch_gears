@@ -1,16 +1,29 @@
 defmodule Mix.Tasks.Gear do
+
+  @version CouchGears.Mixfile.project[:version]
+  @shortdoc "Create a new (or default hello_world) CouchGear application"
+
   use Mix.Task
 
   import Mix.Generator
   import Mix.Utils, only: [camelize: 1, underscore: 1]
 
-  @version CouchGears.Mixfile.project[:version]
-  @shortdoc "Create a new CouchGears' application"
-
 
   @moduledoc """
-      mix gear - generates hello application
-      mix gear application_name - generates specified application
+  Creates a new CouchGear application.
+  It expects an `application_name`. A project will be created in `apps/application_name`
+  and should be commited.
+
+  Check `CouchGears` module for documentation.
+
+  ## Examples
+
+      mix gear hello_world
+
+  Is equivalent to:
+
+      mix gear
+
   """
   def run(argv) do
     name = case argv do
@@ -36,6 +49,10 @@ defmodule Mix.Tasks.Gear do
 
     create_directory "app/routers"
     create_file "app/routers/application_router.ex", app_router_text
+
+    create_directory "test/" <> name
+    create_file "test/test_helper.exs", test_helper_text
+    create_file "test/" <> name <> "/application_router_test.exs", application_router_test_text
   end
 
 
@@ -49,13 +66,15 @@ defmodule Mix.Tasks.Gear do
   defmodule <%= Mix.Utils.camelize(@name) %>Application.Mixfile do
     use Mix.Project
 
+    @doc false
     def project do
       [ app: :<%= @name %>,
-        version: "0.1.0.dev",
+        version: "<%= @version %>",
         compilers: [:elixir, :app],
         deps_path: "../../../couch_gears/deps",
         deps: deps ]
     end
+
 
     defp deps do
       [{:couch_gears, "<%= @version %>", <%= @couch_gears_source %>}]
@@ -64,20 +83,19 @@ defmodule Mix.Tasks.Gear do
   """
 
   embed_text :mixlock, from_file("../../../../mix.lock")
+  embed_text :test_helper, from_file("../../../../test/test_helper.exs")
 
   embed_text :app_router, """
   defmodule ApplicationRouter do
     use CouchGears.Router
 
-    # Application level filters
-
-    # Sets CouchGears backend version info as a 'Server' response header
+    # Sets CouchGears version info as a 'Server' response header.
     # filter CouchGears.Filters.ServerVersion
 
-    # Sets 'application/json' by default
+    # Sets 'Content-Type: application/json' response header.
     filter CouchGears.Filters.ResponseTypeJSON
 
-    # Accepts only 'application/json' requests. Otherwise, returns a 'Bad Request' response
+    # Accepts only 'Content-Type: application/json' request. Otherwise, returns a '400 Bad Request' response
     # filter CouchGears.Filters.OnlyRequestTypeJSON
 
 
@@ -92,7 +110,7 @@ defmodule Mix.Tasks.Gear do
     use CouchGears
 
     config :gear,
-    # The dbs that enabled for application
+    # application dbs
     known_db: :all
 
 
@@ -109,7 +127,7 @@ defmodule Mix.Tasks.Gear do
     endpoint: ApplicationRouter
 
 
-    # The environment's specific options
+    # The environment specific options
     environment "dev" do
       config :dynamo, compile_on_demand: true, reload_modules: true
     end
@@ -117,6 +135,32 @@ defmodule Mix.Tasks.Gear do
     environment %r(prod|test) do
       config :dynamo, compile_on_demand: true, reload_modules: false
     end
+  end
+  """
+
+  embed_text :application_router_test, """
+  Code.require_file "../../test_helper.exs", __FILE__
+
+  defmodule ApplicationRouterTest do
+    use ExUnit.Case, async: true
+    use CouchGears.Case
+
+    Code.require_file "app/routers/application_router.ex"
+    @app ApplicationRouter
+
+
+    test "returns not_found" do
+      assert get(path: "u/n/k/n/o/w/n").status == 404
+    end
+
+    test "returns body as json" do
+      conn = get(path: "/", headers: [{"Content-Type", "application/json"}])
+
+      assert conn.status == 200
+      assert conn.resp_headers("Content-Type") == "application/json"
+      assert conn.resp_body == "{\\"ok\\":\\"Hello World\\"}"
+    end
+
   end
   """
 end
