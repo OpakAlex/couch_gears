@@ -1,4 +1,8 @@
 defmodule CouchRecord.Document do
+  @moduledoc """
+  This is base module for works with document from couchdb
+  Use simple record for this
+  """
   defmacro __using__(opts) do
     quote do
       defrecordp :document, unquote(opts)

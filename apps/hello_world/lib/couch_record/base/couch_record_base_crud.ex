@@ -1,4 +1,9 @@
 defmodule CouchRecord.Base.CRUD do
+
+  @moduledoc """
+  This module give CRUD methods for couchdb document
+  """
+
   defmacro __using__([]) do
     quote do
 

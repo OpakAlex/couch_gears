@@ -1,51 +1,67 @@
 defmodule CouchRecord.Base do
+  @moduledoc """
+  Gives simple finctions and mixs base modules for work with document record
+  """
   defmacro __using__([]) do
     quote do
 
-      #common functions
-      # use CouchRecord.Base.Common
-
-      #helpers
+      #mixs helpers
       import CouchRecord.Base.Helpers
 
-      #include attrs functions for record
+      #mixs attrs functions for record
       use CouchRecord.Base.DocAttrs
 
-      #include crud
-
+      #mixs crud
       use CouchRecord.Base.CRUD
 
-      #include json_methods
+      #mixs json_methods
       use CouchRecord.Base.JsonMethods
 
-      #include save methods
+      #mixs save methods
       use CouchRecord.Base.Save
 
-      #errors
-     import CouchRecord.Base.Errors
+      #imports errors for saves
+      import CouchRecord.Base.Errors
 
+      @doc """
+      sets couchdb touple to record
+      """
       def body(body, rec) do
         document(rec, body: body)
       end
 
+      @doc """
+      creates new document record
+      """
       def new(body, rec) do
         doc = document(rec, body: body)
         doc.attrs(HashDict.new(body, from_list_to_dic()))
       end
 
+      @doc """
+      returns couchdb document touple
+      """
       def body(document(body: body)) do
         body
       end
 
+      @doc """
+      returns db_name for document
+      """
       def db_name(document(db_name: db_name)) do
         db_name
       end
 
+      @doc """
+      sets db_name to record
+      """
       def db_name(db_name, rec) do
         document(rec, db_name: db_name)
       end
 
-
+      @doc """
+      returns true if document is design doucment; else - false
+      """
       def design?(rec) do
         Regex.match?(%r/^_design/, rec.attrs[:_id])
       end
