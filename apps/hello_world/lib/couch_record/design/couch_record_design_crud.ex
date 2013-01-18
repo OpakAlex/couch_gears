@@ -1,4 +1,7 @@
 defmodule CouchRecord.Design.CRUD do
+  @moduledoc """
+  CRUD functions for design document
+  """
   defmacro __using__([]) do
     quote do
 

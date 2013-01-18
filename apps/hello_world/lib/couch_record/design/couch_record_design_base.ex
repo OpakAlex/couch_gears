@@ -1,30 +1,38 @@
 defmodule CouchRecord.Design.Base do
+  @moduledoc """
+  Base module for design documents
+  """
   defmacro __using__([]) do
     quote do
 
-      #crud
+      #mixs design crud
       use CouchRecord.Design.CRUD
 
-      #view
+      #mixs view
       use CouchRecord.Design.View
 
-      #show
+      #mixs show
       use CouchRecord.Design.Show
 
-      #list
+      #mixs list
       use CouchRecord.Design.List
 
-      #validate_doc_update
+      #mixs validate_doc_update
       use CouchRecord.Design.Validation
 
-      #updates
+      #mixs updates
       use CouchRecord.Design.Update
 
-
+      @doc """
+      returns true if design document has views|lists|shows|updates|validations fields; else - false
+      """
       def exist?(type, rec) do
         rec.attr?(plural(:atom, type))
       end
 
+      @doc """
+      returns true if design document has views|lists|shows|updates|validations with given name; else - false
+      """
       def exist?(type, name, rec) do
         if rec.exist?(type) do
           case rec.attrs[plural(:atom, type)][name] do
@@ -36,15 +44,24 @@ defmodule CouchRecord.Design.Base do
         end
       end
 
+      @doc """
+      returns name for design document
+      """
       def name(rec) do
         Regex.replace(%r(_design/), rec.attrs[:_id], '')
       end
 
+      @doc """
+      returns body for view, list, show, update fields
+      """
       def body(type, name, rec) do
         {body} = rec.attrs[plural(:atom, type)][name]
         body
       end
 
+      @doc """
+      returns pluar for singl word
+      """
       def plural(:atom, singl) do
         binary_to_atom("#{to_binary(singl)}s")
       end
