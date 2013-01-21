@@ -1,0 +1,21 @@
+defmodule CouchRecord.Design.Document do
+  @moduledoc """
+  This is base module for works with design document from couchdb
+  Uses simple record for this
+  """
+  defmacro __using__(opts) do
+    quote do
+      defrecordp :document, unquote(opts)
+
+      import CouchRecord.Design.Common
+      use CouchRecord.Base
+      use CouchRecord.Design.Base
+
+    end
+  end
+end
+
+defmodule CouchRecord.Design.Document do
+  use CouchRecord.Design.Document, [db_name: nil, body: nil, attrs: nil]
+  use CouchRecord.Base.Document
+end

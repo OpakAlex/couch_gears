@@ -3,8 +3,8 @@ Code.require_file "../../test_helper.exs", __FILE__
 defmodule CouchRecord.Base.SaveTest do
   use ExUnit.Case, async: false
 
-  @db CouchRecord.Db.new("labeled")
-  @document @db.get("medianet:album:100049")
+  @db CouchRecord.Db.new("test_db")
+  @document @db.get("test_doc_id")
 
   test :save! do
     assert @document.save! == true
