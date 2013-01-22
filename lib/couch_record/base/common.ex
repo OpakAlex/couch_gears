@@ -5,7 +5,6 @@ defmodule CouchRecord.Base.Common do
 
   @doc """
   converts proplist from couchdb document to HashDict type, add this as a second param to HashDict.new function
-  ! Warn this is recursion function
   """
   def from_list_to_dic do
     fn({key, value}) ->

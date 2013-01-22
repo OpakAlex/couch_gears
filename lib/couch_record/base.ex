@@ -63,7 +63,7 @@ defmodule CouchRecord.Base do
       returns true if document is design doucment; else - false
       """
       def design?(rec) do
-        Regex.match?(%r/^_design/, rec.attrs[:_id])
+        is_design?(rec.attrs[:_id])
       end
 
       #private

@@ -58,4 +58,9 @@ defmodule CouchRecord.Base.Helpers do
       _ -> false
     end
   end
+
+  def is_design?(id) do
+    Regex.match?(%r/^_design/, id)
+  end
+
 end

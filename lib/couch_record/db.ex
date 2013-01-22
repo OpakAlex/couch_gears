@@ -1,6 +1,6 @@
 defmodule CouchRecord.Db.Settings do
   @moduledoc """
-  works with db recorn in couchdb
+  works with db record in couchdb
   returns document record based in HashDict
   """
   defmacro __using__(opts) do
@@ -123,7 +123,7 @@ defmodule CouchRecord.Db do
   returns CouchRecord.Document or CouchRecord.Design.Document from couchdb document touple
   """
   def parse_to_record(body, db_name, id) do
-    if Regex.match?(%r/^_design/, id) do
+    if CouchRecord.Base.Helpers.is_design?(id) do
       CouchRecord.Design.Document.parse_to_record(body, db_name)
     else
       CouchRecord.Document.parse_to_record(body, db_name)
