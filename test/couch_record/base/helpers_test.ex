@@ -35,4 +35,9 @@ defmodule CouchRecord.Base.HelpersTest do
     assert Subject.dict_to_list(dict) == [{"a", 1}, {"b", 2}, {"c", {[{"d", 3}]}}]
   end
 
+  test :is_design? do
+    assert Subject.is_design?("_design/test") == true
+    assert Subject.is_design?("test_id_doc_design") == false
+  end
+
 end
