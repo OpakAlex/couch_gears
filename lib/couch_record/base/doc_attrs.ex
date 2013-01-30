@@ -37,7 +37,7 @@ defmodule CouchRecord.Base.DocAttrs do
       end
 
       @doc """
-      returns rev from couchdb document, see also - document.attrs[:_rev
+      returns rev from couchdb document, see also - document.attrs[:_rev]
       """
 
       def _rev(rec) do
