@@ -16,8 +16,8 @@ defmodule CouchRecord.Design.CRUD do
       def remove(type, name, rec) do
         type = plural(:atom, type)
         design_attrs = rec.attrs[type]
-        design_attrs = Dict.delete(design_attrs, to_atom(name))
-        rec.attrs(Dict.put(rec.attrs, type, design_attrs))
+        design_attrs = HashDict.delete(design_attrs, to_atom(name))
+        rec.attrs(HashDict.put(rec.attrs, type, design_attrs))
       end
 
       def rename(type, name, new_name, rec) do
@@ -29,10 +29,13 @@ defmodule CouchRecord.Design.CRUD do
 
       #private
       defp put_design(type, name, value, rec) do
-        design_attrs = Dict.put(rec.attrs[type], to_atom(name), {[value]})
+        value = case value do
+          {funct_type, value} -> HashDict.new([{to_atom(funct_type), value}])
+          _ -> value
+        end
+        design_attrs = Dict.put(rec.attrs[type], to_atom(name), value)
         rec.attrs(Dict.put(rec.attrs, type, design_attrs))
       end
-
     end
   end
 end

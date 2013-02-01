@@ -23,22 +23,22 @@ defmodule CouchRecordDesignBaseTest do
   end
 
   test :body do
-    assert @desing_document.body(:show, :one) == [{"map", "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"}]
+    assert @desing_document.body(:show, :one) == HashDict.new([map: "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"])
   end
 
   test :create do
-    create_design_document = @desing_document.put(:show, :test, {"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
-    assert create_design_document.body(:show, :test) == [{"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"}]
+    create_design_document = @desing_document.put(:show, :test, {:map, "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
+    assert create_design_document.body(:show, :test) == HashDict.new([map: "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"])
   end
 
   test :create_list do
-    create_design_document = @desing_document.put(:list, :test, {"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
-    assert create_design_document.body(:list, :test) == [{"map", "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"}]
+    create_design_document = @desing_document.put(:list, :test, {:map, "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"})
+    assert create_design_document.body(:list, :test) == HashDict.new([map: "function(doc) { if (doc.type == 'test') emit(null, {_id: doc._id}) }"])
   end
 
   test :update do
     update_desing_document = @desing_document.put(:show, :one, {"map", "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"})
-    assert update_desing_document.body(:show, :one) == [{"map", "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"}]
+    assert update_desing_document.body(:show, :one) == HashDict.new([{:map, "function(doc) { if (doc.type == 'album') emit(null, {_id: doc._id}) }"}])
   end
 
   test :remove do

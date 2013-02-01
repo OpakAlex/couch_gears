@@ -10,8 +10,8 @@ defmodule CouchRecord.Design.CommonTest do
 
     view = [{"map", "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"}]
     list = [{"a", 1},{"views",{[{"test", {view}}]}}]
-
-    assert HashDict.new(list, Subject.from_list_to_dic) ==  HashDict.new([a: 1, views: HashDict.new([test: {view}])])
+    hash_view = HashDict.new([map: "function(doc) { if (doc.type == 'track') emit(null, {_id: doc._id}) }"])
+    assert HashDict.new(list, Subject.from_list_to_dic) ==  HashDict.new([a: 1, views: HashDict.new([test: hash_view])])
 
   end
 

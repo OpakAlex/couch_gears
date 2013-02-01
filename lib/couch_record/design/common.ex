@@ -27,7 +27,7 @@ defmodule CouchRecord.Design.Common do
   this function check for system fields in design document
   """
   def design_key?(key) do
-    (key == "views" || key == "lists" || key == "shows" || key == "updates")
+    (key == "map" || key == "reduce")
   end
 
   @doc """

@@ -29,10 +29,10 @@ defmodule CouchRecord.Base.HelpersTest do
 
   test :to_list_binary do
     dict = HashDict.new([a: 1, b: 2, c: 3])
-    assert Subject.dict_to_list(dict) == [{"a",1},{"b",2},{"c",3}]
+    assert Subject.dict_to_list(dict) == [{"c",3},{"b",2},{"a",1}]
 
     dict = HashDict.new([a: 1, b: 2, c: HashDict.new([d: 3])])
-    assert Subject.dict_to_list(dict) == [{"a", 1}, {"b", 2}, {"c", {[{"d", 3}]}}]
+    assert Subject.dict_to_list(dict) == [{"c",{[{"d",3}]}},{"b",2},{"a",1}]
   end
 
   test :is_design? do

@@ -52,11 +52,15 @@ defmodule CouchRecord.Base.Helpers do
   @doc """
   returns true when HashDict else - false
   """
-  def is_hash_dict?(value) do
+  def is_hash_dict?(value) when is_tuple(value) do
     case value do
-      {HashDict, _} -> true
-      _ -> false
+      {_} -> false
+      _ -> true
     end
+  end
+
+  def is_hash_dict?(value) do
+    false
   end
 
   def is_design?(id) do

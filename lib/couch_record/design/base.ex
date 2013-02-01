@@ -55,8 +55,7 @@ defmodule CouchRecord.Design.Base do
       returns body for view, list, show, update fields
       """
       def body(type, name, rec) do
-        {body} = rec.attrs[plural(:atom, type)][name]
-        body
+        rec.attrs[plural(:atom, type)][name]
       end
 
       @doc """
