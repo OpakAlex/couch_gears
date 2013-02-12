@@ -29,8 +29,16 @@ defmodule CouchRecord.Db.Settings do
         CouchRecord.Db.open({rec.db_name, doc_id})
       end
 
+      def open(doc_id, rec, rev) do
+        CouchRecord.Db.open({rec.db_name, doc_id, rev})
+      end
+
       def get(doc_id, rec) do
         rec.open(doc_id)
+      end
+
+      def get(doc_id, rec, rev) do
+        rec.open(doc_id, rev)
       end
 
       @doc """
@@ -69,6 +77,8 @@ defmodule CouchRecord.Db do
 
   defdelegate get(prop), to: CouchRecord.Db, as: open(prop)
 
+  defrecord RevInfo, Record.extract(:rev_info, from: "couch_db.hrl")
+
   @doc """
   returns new settings record
   """
@@ -94,6 +104,19 @@ defmodule CouchRecord.Db do
       :no_db_file -> :no_db_file
       db ->
         case :couch_db.open_doc(db, id) do
+          {:ok, doc} ->
+            {body} = :couch_doc.to_json_obj(doc, [])
+            parse_to_record(body, db_name, id)
+          {:not_found, :missing} -> :not_found
+        end
+    end
+  end
+
+  def open({db_name, id, rev}) do
+    case db_int(db_name) do
+      :no_db_file -> :no_db_file
+      db ->
+        case :couch_db.open_doc(db, id, [RevInfo.new(rev: rev)]) do
           {:ok, doc} ->
             {body} = :couch_doc.to_json_obj(doc, [])
             parse_to_record(body, db_name, id)
